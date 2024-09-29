@@ -1,0 +1,43 @@
+services:
+  api:
+    image: python:latest
+    ports:
+      - "4000:4000"
+    networks:
+      - db
+      - mqtt
+
+  postgres:
+    image: postgres:latest
+    restart: always
+    networks:
+      - db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    ports:
+      - "1883:1883"
+    networks:
+      - mqtt
+    volumes:
+      - mosquitto_conf:/mosquitto/config
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_log:/mosquitto/log
+
+networks:
+  db:
+  mqtt:
+
+volumes:
+  postgres_data:
+  mosquitto_conf:
+  mosquitto_data:
+  mosquitto_log:
