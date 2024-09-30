@@ -1,11 +1,15 @@
 services:
   api:
     image: python:latest
+    restart: always
     ports:
       - "4000:4000"
     networks:
       - db
       - mqtt
+    volumes:
+      - ./api:/app
+    command: sh -c "pip install -r requirements.txt && python main.py"
 
   postgres:
     image: postgres:latest
@@ -19,25 +23,26 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./postgres:/var/lib/postgresql/data
 
   mosquitto:
     image: eclipse-mosquitto:latest
+    restart: always
     ports:
       - "1883:1883"
+      - "9001:9001"
     networks:
       - mqtt
     volumes:
-      - mosquitto_conf:/mosquitto/config
-      - mosquitto_data:/mosquitto/data
-      - mosquitto_log:/mosquitto/log
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
 
 networks:
   db:
   mqtt:
 
 volumes:
-  postgres_data:
-  mosquitto_conf:
-  mosquitto_data:
-  mosquitto_log:
+  api:
+  postgres:
+  mosquitto:
