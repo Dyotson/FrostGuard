@@ -4,9 +4,14 @@ services:
     #restart: always
     ports:
       - "8000:8000"
+    container_name: api
     networks:
-      - db
-      - mqtt
+      db:
+        aliases:
+          - api.local
+      mqtt:
+        aliases:
+          - api.local
     volumes:
       - ./api:/app
     command: sh -c "pip install -r /app/requirements.txt && python /app/manage.py runserver 0.0.0.0:8000"
@@ -16,8 +21,11 @@ services:
   postgres:
     image: postgres:latest
     restart: always
+    container_name: postgres
     networks:
-      - db
+      db:
+        aliases:
+          - postgres.local
     ports:
       - "5432:5432"
     environment:
@@ -26,6 +34,7 @@ services:
       POSTGRES_DB: postgres
     volumes:
       - ./postgres:/var/lib/postgresql/data
+    
 
   mosquitto:
     image: eclipse-mosquitto:latest
@@ -33,8 +42,11 @@ services:
     ports:
       - "1883:1883"
       - "9001:9001"
+    container_name: mosquitto
     networks:
-      - mqtt
+      mqtt:
+        aliases:
+          - mosquitto.local
     volumes:
       - ./mosquitto/config:/mosquitto/config
       - ./mosquitto/data:/mosquitto/data
