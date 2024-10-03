@@ -1,3 +1,5 @@
 mosquitto/data/
 mosquitto/log/
 postgres/
+__pycache__/
+*/__pycache__/
