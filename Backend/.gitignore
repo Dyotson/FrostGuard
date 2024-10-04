@@ -3,3 +3,5 @@ mosquitto/log/
 postgres/
 __pycache__/
 */__pycache__/
+
+.env
