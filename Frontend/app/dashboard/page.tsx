@@ -1,22 +1,54 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react";
 import { Bar, BarChart, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "@/components/ui/chart"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { TabsContent, Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Calendar } from "@/components/ui/calendar"
 import { MapPin, ThermometerSnowflake, Droplets, Wind, AlertTriangle } from "lucide-react"
+import Link from "next/link";
+import Logo from "@/components/common/Logo";
 
+interface ChartData {
+  name: string;
+  temp: number;
+}
+
+interface BarChartData {
+  name: string;
+  value: number;
+}
 export default function AdminDashboard() {
   const [date, setDate] = useState<Date | undefined>(new Date())
+
+  const temperatureData: ChartData[] = useMemo(() => [
+    { name: "Lun", temp: -2 },
+    { name: "Mar", temp: -1 },
+    { name: "Mié", temp: 0 },
+    { name: "Jue", temp: 1 },
+    { name: "Vie", temp: -1 },
+    { name: "Sáb", temp: -3 },
+    { name: "Dom", temp: -2 },
+  ], [])
+
+  const alertDistributionData: BarChartData[] = useMemo(() => [
+    { name: "Helada", value: 45 },
+    { name: "Nieve", value: 30 },
+    { name: "Viento", value: 15 },
+    { name: "Granizo", value: 10 },
+  ], [])
 
   return (
     <div className="flex-col md:flex">
       <div className="border-b">
         <div className="flex h-16 items-center px-4">
-          <ThermometerSnowflake className="mr-2 h-6 w-6" />
-          <h2 className="text-lg font-semibold">FrostGuard Admin</h2>
+          <Link href="/" className="flex items-center space-x-2">
+            <Logo className="h-8 w-8" />
+            <span className="text-lg font-semibold text-gray-800 dark:text-white">
+              FrostGuard
+            </span>
+          </Link>
           <div className="ml-auto flex items-center space-x-4">
             <Select>
               <SelectTrigger className="w-[180px]">
@@ -49,9 +81,7 @@ export default function AdminDashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">12</div>
-                  <p className="text-xs text-muted-foreground">
-                    +2 desde ayer
-                  </p>
+                  <p className="text-xs text-muted-foreground">+2 desde ayer</p>
                 </CardContent>
               </Card>
               <Card>
@@ -117,30 +147,12 @@ export default function AdminDashboard() {
               <Card className="col-span-3">
                 <CardHeader>
                   <CardTitle>Pronóstico de Temperatura</CardTitle>
-                  <CardDescription>
-                    Próximos 7 días
-                  </CardDescription>
+                  <CardDescription>Próximos 7 días</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="h-[200px]">
                     <ResponsiveContainer width="100%" height="100%">
-                      <LineChart
-                        data={[
-                          { name: "Lun", temp: -2 },
-                          { name: "Mar", temp: -1 },
-                          { name: "Mié", temp: 0 },
-                          { name: "Jue", temp: 1 },
-                          { name: "Vie", temp: -1 },
-                          { name: "Sáb", temp: -3 },
-                          { name: "Dom", temp: -2 },
-                        ]}
-                        margin={{
-                          top: 5,
-                          right: 10,
-                          left: 10,
-                          bottom: 0,
-                        }}
-                      >
+                      <LineChart data={temperatureData}>
                         <Tooltip
                           content={({ active, payload }) => {
                             if (active && payload && payload.length) {
@@ -165,9 +177,9 @@ export default function AdminDashboard() {
                                     </div>
                                   </div>
                                 </div>
-                              )
+                              );
                             }
-                            return null
+                            return null;
                           }}
                         />
                         <Line
@@ -195,14 +207,7 @@ export default function AdminDashboard() {
                 <CardContent className="pl-2">
                   <div className="h-[200px]">
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart
-                        data={[
-                          { name: "Helada", value: 45 },
-                          { name: "Nieve", value: 30 },
-                          { name: "Viento", value: 15 },
-                          { name: "Granizo", value: 10 },
-                        ]}
-                      >
+                      <BarChart data={alertDistributionData}>
                         <XAxis dataKey="name" />
                         <YAxis />
                         <Bar dataKey="value" fill="#8884d8" />
@@ -239,22 +244,34 @@ export default function AdminDashboard() {
                 <div className="space-y-4">
                   <div className="flex items-center">
                     <div className="ml-4 space-y-1">
-                      <p className="text-sm font-medium leading-none">Reporte Mensual de Alertas</p>
-                      <p className="text-sm text-muted-foreground">Generado: 01/06/2023</p>
+                      <p className="text-sm font-medium leading-none">
+                        Reporte Mensual de Alertas
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        Generado: 01/06/2023
+                      </p>
                     </div>
                     <div className="ml-auto font-medium">Descargar</div>
                   </div>
                   <div className="flex items-center">
                     <div className="ml-4 space-y-1">
-                      <p className="text-sm font-medium leading-none">Análisis de Tendencias Climáticas</p>
-                      <p className="text-sm text-muted-foreground">Generado: 15/05/2023</p>
+                      <p className="text-sm font-medium leading-none">
+                        Análisis de Tendencias Climáticas
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        Generado: 15/05/2023
+                      </p>
                     </div>
                     <div className="ml-auto font-medium">Descargar</div>
                   </div>
                   <div className="flex items-center">
                     <div className="ml-4 space-y-1">
-                      <p className="text-sm font-medium leading-none">Resumen de Impacto Económico</p>
-                      <p className="text-sm text-muted-foreground">Generado: 30/04/2023</p>
+                      <p className="text-sm font-medium leading-none">
+                        Resumen de Impacto Económico
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        Generado: 30/04/2023
+                      </p>
                     </div>
                     <div className="ml-auto font-medium">Descargar</div>
                   </div>
@@ -265,5 +282,5 @@ export default function AdminDashboard() {
         </Tabs>
       </div>
     </div>
-  )
+  );
 }

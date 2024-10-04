@@ -8,52 +8,23 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ThermometerSnowflake, Bell, BarChart, Shield } from "lucide-react";
+import Header from "@/components/common/Header";
+import Footer from "@/components/common/Footer";
 
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Header */}
-      <header className="px-4 lg:px-6 h-16 flex items-center justify-between">
-        <Link className="flex items-center space-x-2" href="#">
-          <ThermometerSnowflake className="h-6 w-6" />
-          <span className="text-lg font-semibold">FrostGuard</span>
-        </Link>
-        <nav className="hidden md:flex space-x-6">
-          <Link
-            className="text-sm font-medium hover:underline underline-offset-4"
-            href="#features"
-          >
-            Características
-          </Link>
-          <Link
-            className="text-sm font-medium hover:underline underline-offset-4"
-            href="#pricing"
-          >
-            Precios
-          </Link>
-          <Link
-            className="text-sm font-medium hover:underline underline-offset-4"
-            href="#about"
-          >
-            Acerca de
-          </Link>
-          <Link
-            className="text-sm font-medium hover:underline underline-offset-4"
-            href="#contact"
-          >
-            Contacto
-          </Link>
-        </nav>
-        {/* TODO: Botón para menú móvil (opcional) */}
-        <div className="md:hidden"></div>
-      </header>
+      <Header />
 
+      {/* Main */}
       <main className="flex-1">
+        {/* Sección de Bienvenida */}
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-white dark:bg-gray-900">
           <div className="container mx-auto px-4 md:px-6">
             <div className="flex flex-col items-center space-y-6 text-center">
               <div className="space-y-4">
-                <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
+                <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl text-gray-800 dark:text-white">
                   Bienvenido a FrostGuard
                 </h1>
                 <p className="mx-auto max-w-2xl text-gray-600 dark:text-gray-400 text-lg md:text-xl">
@@ -75,12 +46,13 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Sección de Características */}
         <section
           id="features"
           className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800"
         >
           <div className="container mx-auto px-4 md:px-6">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-center mb-8">
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-center mb-8 text-gray-800 dark:text-white">
               Características Principales
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -88,7 +60,7 @@ export default function Home() {
               <Card className="flex flex-col items-center text-center p-6">
                 <CardHeader className="flex flex-col items-center">
                   <Bell className="h-8 w-8 mb-4 text-primary" />
-                  <CardTitle className="text-lg font-semibold">
+                  <CardTitle className="text-lg font-semibold text-gray-800 dark:text-white">
                     Alertas en Tiempo Real
                   </CardTitle>
                 </CardHeader>
@@ -104,7 +76,7 @@ export default function Home() {
               <Card className="flex flex-col items-center text-center p-6">
                 <CardHeader className="flex flex-col items-center">
                   <BarChart className="h-8 w-8 mb-4 text-primary" />
-                  <CardTitle className="text-lg font-semibold">
+                  <CardTitle className="text-lg font-semibold text-gray-800 dark:text-white">
                     Análisis Predictivo
                   </CardTitle>
                 </CardHeader>
@@ -120,7 +92,7 @@ export default function Home() {
               <Card className="flex flex-col items-center text-center p-6">
                 <CardHeader className="flex flex-col items-center">
                   <Shield className="h-8 w-8 mb-4 text-primary" />
-                  <CardTitle className="text-lg font-semibold">
+                  <CardTitle className="text-lg font-semibold text-gray-800 dark:text-white">
                     Protección Inteligente
                   </CardTitle>
                 </CardHeader>
@@ -136,7 +108,7 @@ export default function Home() {
               <Card className="flex flex-col items-center text-center p-6">
                 <CardHeader className="flex flex-col items-center">
                   <ThermometerSnowflake className="h-8 w-8 mb-4 text-primary" />
-                  <CardTitle className="text-lg font-semibold">
+                  <CardTitle className="text-lg font-semibold text-gray-800 dark:text-white">
                     Monitoreo Continuo
                   </CardTitle>
                 </CardHeader>
@@ -152,27 +124,8 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="w-full py-6 bg-white dark:bg-gray-900 border-t">
-        <div className="container mx-auto px-4 md:px-6 flex flex-col sm:flex-row items-center justify-between">
-          <p className="text-xs text-gray-500 dark:text-gray-400">
-            © 2023 FrostGuard. Todos los derechos reservados.
-          </p>
-          <nav className="flex space-x-4 sm:space-x-6 mt-4 sm:mt-0">
-            <Link
-              className="text-xs hover:underline underline-offset-4"
-              href="#"
-            >
-              Términos de Servicio
-            </Link>
-            <Link
-              className="text-xs hover:underline underline-offset-4"
-              href="#"
-            >
-              Privacidad
-            </Link>
-          </nav>
-        </div>
-      </footer>
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }
