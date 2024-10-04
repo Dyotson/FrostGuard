@@ -1,2 +1,4 @@
 django-ninja
 psycopg2
+twilio
+python-dotenv
