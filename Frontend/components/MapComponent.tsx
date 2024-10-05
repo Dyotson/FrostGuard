@@ -1,6 +1,12 @@
 "use client";
 
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import {
+  GoogleMap,
+  Marker,
+  Polygon,
+  DrawingManager,
+} from "@react-google-maps/api";
+import { ReactNode } from "react";
 
 interface MarkerData {
   lat: number;
@@ -12,12 +18,14 @@ interface MapComponentProps {
   center: { lat: number; lng: number };
   zoom: number;
   markers: MarkerData[];
+  children?: ReactNode;
 }
 
 export default function MapComponent({
   center,
   zoom,
   markers,
+  children,
 }: MapComponentProps) {
   const mapContainerStyle = {
     width: "100%",
@@ -25,20 +33,19 @@ export default function MapComponent({
   };
 
   return (
-    <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}>
-      <GoogleMap
-        mapContainerStyle={mapContainerStyle}
-        center={center}
-        zoom={zoom}
-      >
-        {markers.map((marker, index) => (
-          <Marker
-            key={index}
-            position={{ lat: marker.lat, lng: marker.lng }}
-            label={marker.label}
-          />
-        ))}
-      </GoogleMap>
-    </LoadScript>
+    <GoogleMap
+      mapContainerStyle={mapContainerStyle}
+      center={center}
+      zoom={zoom}
+    >
+      {markers.map((marker, index) => (
+        <Marker
+          key={index}
+          position={{ lat: marker.lat, lng: marker.lng }}
+          label={marker.label}
+        />
+      ))}
+      {children}
+    </GoogleMap>
   );
 }
