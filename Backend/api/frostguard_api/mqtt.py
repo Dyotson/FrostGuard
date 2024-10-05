@@ -19,7 +19,7 @@ class MqttClient(mqtt.Client):
     def on_connect(self, client, userdata, flags, rc):
         self.log(f'Connected with result code {rc}')
         self.subscribe(self.topic)
-        self.loc('Subscribed to topic {self.topic}')
+        self.log('Subscribed to topic {self.topic}')
 
     def on_message(self, client, userdata, message):
         self.log(f'Message on topic {message.topic}: {message.payload}')
