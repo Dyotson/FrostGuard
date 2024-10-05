@@ -9,6 +9,7 @@ class GuardianAlert(models.Model):
     end_datetime = models.DateTimeField()
     message_recommendation = models.TextField()
     guardian_zone = models.ForeignKey(GuardianZone, on_delete=models.PROTECT)
+    active = models.BooleanField(default=False)
 
 
 class GuardianPositionData(models.Model):

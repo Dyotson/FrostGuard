@@ -134,6 +134,7 @@ class GuardianAlertSchema(Schema):
     start_datetime: datetime
     end_datetime: datetime
     message_recommendation: str
+    active: bool
     guardian_zone: GuardianZoneSchema
 
 

@@ -30,7 +30,16 @@ class Command(BaseCommand):
             guardian_zone=zone_1,
             start_datetime=timezone.now() - timedelta(days=1),
             end_datetime=timezone.now() - timedelta(days=1) + timedelta(hours=2),
-            message_recommendation="Utilizar estufas para calentas las plantas"
+            message_recommendation="Utilizar estufas para calentas las plantas",
+            active=True
+        )
+
+        GuardianAlert.objects.create(
+            guardian_zone=zone_1,
+            start_datetime=timezone.now() - timedelta(days=1) - timedelta(hours=5),
+            end_datetime=timezone.now() - timedelta(days=1) - timedelta(hours=2),
+            message_recommendation="Utilizar estufas para calentas las plantas",
+            active=False
         )
 
         # Zone 1
