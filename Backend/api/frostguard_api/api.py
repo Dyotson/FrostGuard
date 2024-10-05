@@ -8,6 +8,14 @@ from datetime import datetime
 
 api = NinjaAPI()
 
+class GuardianZoneSchema(Schema):
+    id: int
+    name: str
+
+
+class CreateGuardianZoneSchema(Schema):
+    name: str
+
 ## Guardian Position Data
 
 class GuardianPositionDataSchema(Schema):
@@ -16,7 +24,7 @@ class GuardianPositionDataSchema(Schema):
     altitude: int
     latitude_i: float
     longitude_i: float
-    guardian_zone_id: int
+    guardian_zone: GuardianZoneSchema
 
 
 class CreateGuardianPositionDataSchema(Schema):
@@ -126,7 +134,7 @@ class GuardianAlertSchema(Schema):
     start_datetime: datetime
     end_datetime: datetime
     message_recommendation: str
-    guardian_zone_id: int
+    guardian_zone: GuardianZoneSchema
 
 
 @api.get("/guardian_alerts", response=List[GuardianAlertSchema])  # List endpoint
@@ -141,14 +149,6 @@ def get_guardian_alert(request, guardian_alert_id: int):
 
 
 ## Guardian Zone
-
-class GuardianZoneSchema(Schema):
-    id: int
-    name: str
-
-
-class CreateGuardianZoneSchema(Schema):
-    name: str
 
 
 @api.get("/guardian_zones", response=List[GuardianZoneSchema])  # List endpoint
