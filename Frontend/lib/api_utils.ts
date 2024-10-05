@@ -14,8 +14,10 @@ async function apiRequest<T>(
 ): Promise<T> {
   const options: RequestInit = {
     method,
+    mode: "no-cors",
     headers: {
       "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
     },
     body: payload ? JSON.stringify(payload) : undefined,
   };
@@ -97,4 +99,8 @@ export async function createFieldConfiguration(
   payload: FieldConfiguration
 ): Promise<void> {
   await apiRequest<void>("/field_configuration", "POST", payload);
+}
+
+export async function fetchAlertsData(): Promise<any> {
+  await apiRequest<any>("/guardian_alerts", "GET");
 }
