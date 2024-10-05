@@ -19,11 +19,63 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         zone_1 = GuardianZone.objects.create(
-            name="Zona 1"
+            name="Zona 1",
+            has_sprinklers=True,
+            has_roof=False,
+            has_heaters=True,
+            has_fans=False,
+            crop_type="Trigo",
+            description="Description for Zona 1",
+            coordinates=[
+                {
+                    "lat": -41.301871,
+                    "lng": -73.508575,
+                },
+                {
+                    "lat": -41.302509,
+                    "lng": -73.508724,
+                },
+                {
+                    "lat": -41.301889,
+                    "lng": -73.508063,
+                },
+                {
+                    "lat": -41.302576,
+                    "lng": -73.508203,
+                },
+            ]
         )
 
         zone_2 = GuardianZone.objects.create(
-            name="Zona 2"
+            name="Zona 2",
+            has_sprinklers=False,
+            has_roof=True,
+            has_heaters=False,
+            has_fans=True,
+            crop_type="Maiz",
+            description="Description for Zona 2",
+            coordinates=[
+                {
+                    "lat": -41.290773,
+                    "lng": -73.546889,
+                },
+                {
+                    "lat": -41.290846,
+                    "lng": -73.546210,
+                },
+                {
+                    "lat": -41.290203,
+                    "lng": -73.546680,
+                },
+                {
+                    "lat": -41.290252,
+                    "lng": -73.545959,
+                },
+                {
+                    "lat": -41.289886,
+                    "lng": -73.546295,
+                },
+            ]
         )
 
         GuardianAlert.objects.create(

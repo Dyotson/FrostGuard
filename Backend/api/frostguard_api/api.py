@@ -18,10 +18,24 @@ guardian_position_data_router = Router(tags=["Guardian Position Data"])
 class GuardianZoneSchema(Schema):
     id: int
     name: str
+    has_sprinklers: bool  
+    has_roof: bool  
+    has_heaters: bool  
+    has_fans: bool  
+    crop_type: str  
+    description: str  
+    coordinates: list  
 
 
 class CreateGuardianZoneSchema(Schema):
     name: str
+    has_sprinklers: bool  
+    has_roof: bool  
+    has_heaters: bool  
+    has_fans: bool  
+    crop_type: str  
+    description: str  
+    coordinates: list  
 
 
 class GuardianPositionDataSchema(Schema):

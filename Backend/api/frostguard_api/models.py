@@ -2,6 +2,13 @@ from django.db import models
 
 class GuardianZone(models.Model):
     name = models.CharField(max_length=255, unique=True)
+    has_sprinklers = models.BooleanField(default=False)
+    has_roof = models.BooleanField(default=False)
+    has_heaters = models.BooleanField(default=False)
+    has_fans = models.BooleanField(default=False)
+    crop_type = models.CharField(default=False)
+    description = models.CharField(max_length=255, default="")
+    coordinates = models.JSONField(default=list)
 
 
 class GuardianAlert(models.Model):
