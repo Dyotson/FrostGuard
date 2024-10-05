@@ -56,8 +56,11 @@ class CreateGuardianPositionDataSchema(Schema):
 
 
 @guardian_position_data_router.get("/", response=List[GuardianPositionDataSchema])
-def list_guardian_position_data(request):
-    return list(GuardianPositionData.objects.all())
+def list_guardian_position_data(request, zone_name: str = None):
+    queryset = GuardianPositionData.objects.all()
+    if zone_name:
+        queryset = queryset.filter(guardian_zone__name__icontains=zone_name)
+    return list(queryset)
 
 
 @guardian_position_data_router.get("/{guardian_position_data_id}", response=GuardianPositionDataSchema)
