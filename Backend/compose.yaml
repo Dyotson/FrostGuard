@@ -1,7 +1,7 @@
 services:
   api:
     image: python:latest
-    #restart: always
+    restart: always
     ports:
       - "8000:8000"
     container_name: api
