@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404
 from ninja import NinjaAPI, Schema
 
 from frostguard_api.models import GuardianPositionData, GuardianTelemetryData
+from datetime import datetime
 
 api = NinjaAPI()
 
@@ -72,7 +73,7 @@ class GuardianTelemetryDataSchema(Schema):
     barometric_pressure: float
     relative_humidity: float
     temperature: float
-    timestamp: str  # Use appropriate format for datetime
+    timestamp: datetime
 
 
 class CreateGuardianTelemetryDataSchema(Schema):
@@ -80,7 +81,7 @@ class CreateGuardianTelemetryDataSchema(Schema):
     barometric_pressure: float
     relative_humidity: float
     temperature: float
-    timestamp: str  # Use appropriate format for datetime
+    timestamp: datetime
 
 
 @api.get("/guardian_telemetry_data", response=List[GuardianTelemetryDataSchema])
