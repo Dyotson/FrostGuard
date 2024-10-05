@@ -1,36 +1,36 @@
 import type { Metadata } from "next";
-import "@/styles/globals.css";
-import { geistSans, geistMono } from "@/styles/fonts";
+import "./globals.css";
+import { geistSans, geistMono } from "./fonts";
 
 // Metadatos mejorados para SEO
 export const metadata: Metadata = {
-//   metadataBase: new URL("http://frostguard.earth/"),
+  //   metadataBase: new URL("http://frostguard.earth/"),
   title: "FrostGuard - Protege tus cultivos",
   description:
     "Plataforma para monitorear condiciones climáticas y proteger cultivos de manera efectiva.",
-//   openGraph: {
-//     title: "FrostGuard",
-//     description: "Monitoreo de clima en tiempo real para cultivos.",
-//     // url: "http://frostguard.earth/",
-//     siteName: "FrostGuard",
-//     images: [
-//       {
-//         url: "/assets/logo.svg",
-//         width: 1200,
-//         height: 630,
-//         alt: "FrostGuard logo",
-//       },
-//     ],
-//     locale: "es_ES",
-//     type: "website",
-//   },
-//   twitter: {
-//     card: "summary_large_image",
-//     site: "@frostguard",
-//     title: "FrostGuard",
-//     description: "Protege tus cultivos con monitoreo en tiempo real.",
-//     images: ["/assets/logo.svg"],
-//   },
+  //   openGraph: {
+  //     title: "FrostGuard",
+  //     description: "Monitoreo de clima en tiempo real para cultivos.",
+  //     // url: "http://frostguard.earth/",
+  //     siteName: "FrostGuard",
+  //     images: [
+  //       {
+  //         url: "/assets/logo.svg",
+  //         width: 1200,
+  //         height: 630,
+  //         alt: "FrostGuard logo",
+  //       },
+  //     ],
+  //     locale: "es_ES",
+  //     type: "website",
+  //   },
+  //   twitter: {
+  //     card: "summary_large_image",
+  //     site: "@frostguard",
+  //     title: "FrostGuard",
+  //     description: "Protege tus cultivos con monitoreo en tiempo real.",
+  //     images: ["/assets/logo.svg"],
+  //   },
 };
 
 export default function RootLayout({
