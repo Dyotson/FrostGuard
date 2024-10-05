@@ -81,3 +81,20 @@ export async function checkApiStatus(): Promise<{
 }> {
   return apiRequest<{ status: string; message: string }>("/status");
 }
+
+
+export interface FieldConfiguration {
+  hasSprinklers: boolean;
+  hasRoof: boolean;
+  hasHeaters: boolean;
+  hasFans: boolean;
+  cropType: string;
+  description: string;
+}
+
+// Función para crear una nueva configuración de campo
+export async function createFieldConfiguration(
+  payload: FieldConfiguration
+): Promise<void> {
+  await apiRequest<void>("/field_configuration", "POST", payload);
+}

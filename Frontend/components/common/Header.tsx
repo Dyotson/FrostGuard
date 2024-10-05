@@ -10,7 +10,7 @@ const Header: React.FC = () => {
       <Link href="/" className="flex items-center space-x-2">
         <Logo className="h-8 w-8" />
         <span className="text-lg font-semibold text-gray-800 dark:text-white">
-          FrostGuard
+          FrostAway
         </span>
       </Link>
 
