@@ -4,3 +4,4 @@ twilio
 python-dotenv
 paho-mqtt
 pytz
+django-cors-headers
