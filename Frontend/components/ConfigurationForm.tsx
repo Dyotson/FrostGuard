@@ -1,12 +1,9 @@
-// components/ConfigurationForm.tsx
-
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
@@ -15,33 +12,53 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { createFieldConfiguration } from "@/lib/api_utils";
+import { Label } from "@/components/ui/label";
+import {
+  Droplet,
+  Home,
+  Thermometer,
+  Fan,
+  Leaf,
+  FileText,
+  XCircle,
+} from "lucide-react";
 
-interface ConfigurationData {
+interface ZoneConfiguration {
+  id: string;
+  name: string;
   hasSprinklers: boolean;
   hasRoof: boolean;
   hasHeaters: boolean;
   hasFans: boolean;
   cropType: string;
   description: string;
+  coordinates: { lat: number; lng: number }[];
 }
 
-export default function ConfigurationForm() {
-  const [formData, setFormData] = useState<ConfigurationData>({
-    hasSprinklers: false,
-    hasRoof: false,
-    hasHeaters: false,
-    hasFans: false,
-    cropType: "",
-    description: "",
-  });
+interface ConfigurationFormProps {
+  zone: ZoneConfiguration;
+  onSave: (zone: ZoneConfiguration) => void;
+  onResetPolygon: () => void;
+  onCancel: () => void;
+}
 
-  const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+export default function ConfigurationForm({
+  zone,
+  onSave,
+  onResetPolygon,
+  onCancel,
+}: ConfigurationFormProps) {
+  const [formData, setFormData] = useState<ZoneConfiguration>(zone);
 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: checked }));
+  useEffect(() => {
+    setFormData(zone);
+  }, [zone]);
+
+  const handleSwitchChange = (
+    field: keyof ZoneConfiguration,
+    checked: boolean
+  ) => {
+    setFormData((prev) => ({ ...prev, [field]: checked }));
   };
 
   const handleInputChange = (
@@ -51,117 +68,125 @@ export default function ConfigurationForm() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleCropTypeChange = (value: string) => {
+  const handleSelectChange = (value: string) => {
     setFormData((prev) => ({ ...prev, cropType: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-
-    try {
-      await createFieldConfiguration(formData);
-      // Redirigir al apartado General después de guardar
-      router.push("/dashboard/general");
-    } catch (error) {
-      console.error("Error al enviar la configuración:", error);
-      // Manejar el error (mostrar mensaje al usuario)
-    } finally {
-      setIsSubmitting(false);
-    }
+    onSave(formData);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      {/* Aspersores */}
-      <div className="flex items-center">
-        <Checkbox
-          name="hasSprinklers"
-          id="hasSprinklers"
-          checked={formData.hasSprinklers}
-          onChange={handleCheckboxChange}
-        />
-        <label htmlFor="hasSprinklers" className="ml-2">
-          ¿Tiene aspersores?
-        </label>
-      </div>
+    <div className="mt-6">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="mb-4">
+          <Label htmlFor={`name-${formData.id}`}>
+            <Home className="mr-2 h-4 w-4 inline" /> Nombre de la Zona
+          </Label>
+          <Input
+            id={`name-${formData.id}`}
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+            className="mt-1"
+            required
+          />
+        </div>
 
-      {/* Techo */}
-      <div className="flex items-center">
-        <Checkbox
-          name="hasRoof"
-          id="hasRoof"
-          checked={formData.hasRoof}
-          onChange={handleCheckboxChange}
-        />
-        <label htmlFor="hasRoof" className="ml-2">
-          ¿Tiene techo?
-        </label>
-      </div>
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <div className="flex items-center justify-between">
+            <Label htmlFor={`sprinklers-${formData.id}`}>
+              <Droplet className="mr-2 h-4 w-4 inline" /> Aspersores
+            </Label>
+            <Switch
+              id={`sprinklers-${formData.id}`}
+              checked={formData.hasSprinklers}
+              onCheckedChange={(checked) =>
+                handleSwitchChange("hasSprinklers", checked)
+              }
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <Label htmlFor={`roof-${formData.id}`}>
+              <Home className="mr-2 h-4 w-4 inline" /> Techo
+            </Label>
+            <Switch
+              id={`roof-${formData.id}`}
+              checked={formData.hasRoof}
+              onCheckedChange={(checked) =>
+                handleSwitchChange("hasRoof", checked)
+              }
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <Label htmlFor={`heaters-${formData.id}`}>
+              <Thermometer className="mr-2 h-4 w-4 inline" /> Calefactores
+            </Label>
+            <Switch
+              id={`heaters-${formData.id}`}
+              checked={formData.hasHeaters}
+              onCheckedChange={(checked) =>
+                handleSwitchChange("hasHeaters", checked)
+              }
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <Label htmlFor={`fans-${formData.id}`}>
+              <Fan className="mr-2 h-4 w-4 inline" /> Ventiladores
+            </Label>
+            <Switch
+              id={`fans-${formData.id}`}
+              checked={formData.hasFans}
+              onCheckedChange={(checked) =>
+                handleSwitchChange("hasFans", checked)
+              }
+            />
+          </div>
+        </div>
 
-      {/* Calefactores */}
-      <div className="flex items-center">
-        <Checkbox
-          name="hasHeaters"
-          id="hasHeaters"
-          checked={formData.hasHeaters}
-          onChange={handleCheckboxChange}
-        />
-        <label htmlFor="hasHeaters" className="ml-2">
-          ¿Tiene calefactores?
-        </label>
-      </div>
+        <div className="mb-4">
+          <Label htmlFor={`cropType-${formData.id}`}>
+            <Leaf className="mr-2 h-4 w-4 inline" /> Tipo de Cultivo
+          </Label>
+          <Select value={formData.cropType} onValueChange={handleSelectChange}>
+            <SelectTrigger id={`cropType-${formData.id}`} className="mt-1">
+              <SelectValue placeholder="Selecciona el tipo de cultivo" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Maíz">Maíz</SelectItem>
+              <SelectItem value="Trigo">Trigo</SelectItem>
+              <SelectItem value="Soja">Soja</SelectItem>
+              <SelectItem value="Otros">Otros</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
 
-      {/* Ventiladores */}
-      <div className="flex items-center">
-        <Checkbox
-          name="hasFans"
-          id="hasFans"
-          checked={formData.hasFans}
-          onChange={handleCheckboxChange}
-        />
-        <label htmlFor="hasFans" className="ml-2">
-          ¿Tiene ventiladores?
-        </label>
-      </div>
+        <div className="mb-4">
+          <Label htmlFor={`description-${formData.id}`}>
+            <FileText className="mr-2 h-4 w-4 inline" /> Descripción
+          </Label>
+          <Textarea
+            id={`description-${formData.id}`}
+            name="description"
+            value={formData.description}
+            onChange={handleInputChange}
+            placeholder="Describe las características de esta zona"
+            className="mt-1"
+            required
+          />
+        </div>
 
-      {/* Tipo de Cultivo */}
-      <div>
-        <label htmlFor="cropType" className="block mb-1">
-          Tipo de cultivo
-        </label>
-        <Select value={formData.cropType} onValueChange={handleCropTypeChange}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Seleccione el tipo de cultivo" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="Maíz">Maíz</SelectItem>
-            <SelectItem value="Trigo">Trigo</SelectItem>
-            <SelectItem value="Soja">Soja</SelectItem>
-            <SelectItem value="Otros">Otros</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Descripción */}
-      <div>
-        <label htmlFor="description" className="block mb-1">
-          Descripción personalizada
-        </label>
-        <Textarea
-          name="description"
-          id="description"
-          value={formData.description}
-          onChange={handleInputChange}
-          placeholder="Escriba una descripción del terreno..."
-          required
-        />
-      </div>
-
-      {/* Botón de Envío */}
-      <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Enviando..." : "Guardar Configuración"}
-      </Button>
-    </form>
+        <div className="flex space-x-4">
+          <Button type="submit">Guardar Zona</Button>
+          <Button type="button" onClick={onResetPolygon} variant="destructive">
+            <XCircle className="mr-2 h-4 w-4 inline" /> Resetear Polígono
+          </Button>
+          <Button type="button" onClick={onCancel} variant="outline">
+            Cancelar
+          </Button>
+        </div>
+      </form>
+    </div>
   );
 }

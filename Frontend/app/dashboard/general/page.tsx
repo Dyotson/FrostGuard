@@ -46,7 +46,7 @@ const zones = {
 
 export default function GeneralPage() {
   const [selectedZone, setSelectedZone] = useState("Zona 1");
-  const currentZone = zones[selectedZone];
+//   const currentZone = zones[selectedZone];
 
   return (
     <>
@@ -92,13 +92,13 @@ export default function GeneralPage() {
         <CardHeader>
           <CardTitle>Mapa del Terreno</CardTitle>
         </CardHeader>
-        <CardContent className="h-[400px]">
+        {/* <CardContent className="h-[400px]">
           <MapComponent
             center={currentZone.center}
             zoom={12}
             markers={currentZone.markers}
           />
-        </CardContent>
+        </CardContent> */}
       </Card>
     </>
   );
