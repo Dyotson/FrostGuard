@@ -173,8 +173,11 @@ guardian_zones_router = Router(tags=["Guardian Zones"])
 
 
 @guardian_zones_router.get("/", response=List[GuardianZoneSchema])
-def list_guardian_zones(request):
-    return list(GuardianZone.objects.all())
+def list_guardian_zones(request, name: str = None):
+    queryset = GuardianZone.objects.all()
+    if name:
+        queryset = queryset.filter(name__icontains=name)
+    return list(queryset)
 
 
 @guardian_zones_router.get("/{guardian_zone_id}", response=GuardianZoneSchema)
