@@ -4,6 +4,9 @@ from typing import List
 from django.shortcuts import get_object_or_404
 from ninja import NinjaAPI, Router, Schema
 
+from django.db.models import Max, Min
+from collections import defaultdict
+
 from frostguard_api.models import GuardianAlert, GuardianPositionData, GuardianTelemetryData, GuardianZone
 
 # Instancia de la API principal
@@ -115,6 +118,22 @@ class CreateGuardianTelemetryDataSchema(Schema):
 @guardian_telemetry_data_router.get("/", response=List[GuardianTelemetryDataSchema])
 def list_guardian_telemetry_data(request):
     return list(GuardianTelemetryData.objects.all())
+
+
+@guardian_telemetry_data_router.get("/most_recent_lowest_temperature", response=GuardianTelemetryDataSchema)
+def get_most_recent_lowest_temperature(request):
+    recent_data = GuardianTelemetryData.objects.values('sender').annotate(max_timestamp=Max('timestamp'))
+
+    recent_telemetry = {}
+    for data in recent_data:
+        recent_telemetry[data['sender']] = GuardianTelemetryData.objects.filter(
+            sender=data['sender'],
+            timestamp=data['max_timestamp']
+        ).first()
+
+    lowest_temperature_data = min(recent_telemetry.values(), key=lambda x: x.temperature)
+    
+    return lowest_temperature_data
 
 
 @guardian_telemetry_data_router.get("/{guardian_telemetry_data_id}", response=GuardianTelemetryDataSchema)
