@@ -101,6 +101,26 @@ export async function createFieldConfiguration(
   await apiRequest<void>("/field_configuration", "POST", payload);
 }
 
-export async function fetchAlertsData(): Promise<any> {
-  await apiRequest<any>("/guardian_alerts", "GET");
+// Type for the Guardian Zone
+type GuardianZone = {
+  id: number;
+  name: string;
+};
+
+// Type for the Alert
+type Alert = {
+  id: number;
+  start_datetime: string;  // ISO string format
+  end_datetime: string;    // ISO string format
+  message_recommendation: string;
+  active: boolean;
+  guardian_zone: GuardianZone;
+};
+
+// Type for the Array of Alerts
+type AlertsResponse = Alert[];
+
+export async function fetchAlertsData(): Promise<AlertsResponse> {
+  const response = await apiRequest<AlertsResponse>("/guardian_alerts", "GET");
+  return response;
 }
