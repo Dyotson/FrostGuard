@@ -14,10 +14,8 @@ async function apiRequest<T>(
 ): Promise<T> {
   const options: RequestInit = {
     method,
-    mode: "no-cors",
     headers: {
       "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
     },
     body: payload ? JSON.stringify(payload) : undefined,
   };
@@ -101,6 +99,12 @@ export async function createFieldConfiguration(
   await apiRequest<void>("/field_configuration", "POST", payload);
 }
 
-export async function fetchAlertsData(): Promise<any> {
-  await apiRequest<any>("/guardian_alerts", "GET");
+export async function fetchAlertsData(): Promise<any[]> {
+  try {
+    const response = await apiRequest<any[]>("/guardian_alerts", "GET");
+    return response;
+  } catch (error) {
+    console.error("Error al obtener las alertas", error);
+    throw new Error("Error al obtener los datos de las alertas.");
+  }
 }

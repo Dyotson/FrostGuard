@@ -3,27 +3,40 @@
 import { useEffect, useState } from "react";
 import AlertCard from "@/components/AlertCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { fetchAlertsData } from "@/lib/api_utils"; // Replace with your actual API call if different
+import { fetchAlertsData } from "@/lib/api_utils";
+
+interface Alert {
+  id: string;
+  start_datetime: string;
+  end_datetime: string;
+  active: boolean;
+  message_recommendation: string;
+}
 
 export default function AlertsPage() {
-  const [alerts, setAlerts] = useState([]);
+  const [alerts, setAlerts] = useState<Alert[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Fetch the alerts data
+
     const fetchData = async () => {
-      const data = await fetchAlertsData(); // Replace with your actual API fetch
-      setAlerts(data);
+      try {
+        const data = await fetchAlertsData();
+        setAlerts(data);
+      } catch (error) {
+        setError("Error al cargar las alertas.");
+      }
     };
 
     fetchData();
   }, []);
 
-  // Filter alerts into active and historical categories
-  const activeAlerts = alerts.filter(alert => alert.active);
-  const historicalAlerts = alerts.filter(alert => !alert.active);
 
-  // Helper function to format date and time
-  const formatDateTime = (datetime) => {
+  const activeAlerts = alerts.filter((alert) => alert.active);
+  const historicalAlerts = alerts.filter((alert) => !alert.active);
+
+
+  const formatDateTime = (datetime: string) => {
     const date = new Date(datetime);
     return date.toLocaleString("es-ES", {
       weekday: "long",
@@ -33,6 +46,18 @@ export default function AlertsPage() {
       minute: "2-digit",
     });
   };
+
+
+  const calculateDuration = (start: string, end: string): number => {
+    const startTime = new Date(start).getTime();
+    const endTime = new Date(end).getTime();
+    const durationHours = Math.abs(endTime - startTime) / 36e5;
+    return durationHours;
+  };
+
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   return (
     <div>
@@ -46,11 +71,21 @@ export default function AlertsPage() {
             activeAlerts.map((alert) => (
               <AlertCard
                 key={alert.id}
-                hours={Math.abs(new Date(alert.end_datetime) - new Date(alert.start_datetime)) / 36e5}
+                hours={calculateDuration(
+                  alert.start_datetime,
+                  alert.end_datetime
+                )}
                 day={formatDateTime(alert.start_datetime)}
-                startTime={new Date(alert.start_datetime).toLocaleTimeString("es-ES")}
-                endTime={new Date(alert.end_datetime).toLocaleTimeString("es-ES")}
-                duration={`${Math.abs(new Date(alert.end_datetime) - new Date(alert.start_datetime)) / 36e5} horas`}
+                startTime={new Date(alert.start_datetime).toLocaleTimeString(
+                  "es-ES"
+                )}
+                endTime={new Date(alert.end_datetime).toLocaleTimeString(
+                  "es-ES"
+                )}
+                duration={`${calculateDuration(
+                  alert.start_datetime,
+                  alert.end_datetime
+                )} horas`}
                 recommendation={alert.message_recommendation}
               />
             ))
@@ -70,11 +105,21 @@ export default function AlertsPage() {
             historicalAlerts.map((alert) => (
               <AlertCard
                 key={alert.id}
-                hours={Math.abs(new Date(alert.end_datetime) - new Date(alert.start_datetime)) / 36e5}
+                hours={calculateDuration(
+                  alert.start_datetime,
+                  alert.end_datetime
+                )}
                 day={formatDateTime(alert.start_datetime)}
-                startTime={new Date(alert.start_datetime).toLocaleTimeString("es-ES")}
-                endTime={new Date(alert.end_datetime).toLocaleTimeString("es-ES")}
-                duration={`${Math.abs(new Date(alert.end_datetime) - new Date(alert.start_datetime)) / 36e5} horas`}
+                startTime={new Date(alert.start_datetime).toLocaleTimeString(
+                  "es-ES"
+                )}
+                endTime={new Date(alert.end_datetime).toLocaleTimeString(
+                  "es-ES"
+                )}
+                duration={`${calculateDuration(
+                  alert.start_datetime,
+                  alert.end_datetime
+                )} horas`}
                 recommendation={alert.message_recommendation}
               />
             ))
