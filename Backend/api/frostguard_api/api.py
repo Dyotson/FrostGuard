@@ -1,8 +1,8 @@
-
-
-from ninja import NinjaAPI, Schema
 from typing import List
+
 from django.shortcuts import get_object_or_404
+from ninja import NinjaAPI, Schema
+
 from frostguard_api.models import GuardianPositionData
 
 api = NinjaAPI()
@@ -20,6 +20,11 @@ class CreateGuardianPositionDataSchema(Schema):
     altitude: int
     latitude_i: int
     longitude_i: int
+
+
+@api.get("/status")
+def status(request):
+    return {"status": "ok", "message": "Backend is running"}
 
 
 @api.get("/guardian_position_data", response=List[GuardianPositionDataSchema])

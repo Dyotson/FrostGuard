@@ -1,14 +1,35 @@
-"use client"
+"use client";
 
 import { useState, useMemo } from "react";
-import { Bar, BarChart, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "@/components/ui/chart"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { TabsContent, Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Calendar } from "@/components/ui/calendar"
-import { MapPin, ThermometerSnowflake, Droplets, Wind, AlertTriangle } from "lucide-react"
+import {
+  BarChart,
+  Bar,
+  LineChart,
+  Line,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "@/components/ui/chart";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  ThermometerSnowflake,
+  Droplets,
+  Wind,
+  AlertTriangle,
+} from "lucide-react";
 import Link from "next/link";
 import Logo from "@/components/common/Logo";
+import StatisticCard from "@/components/ui/StatisticCard";
+import Map from "@/components/ui/Map";
 
 interface ChartData {
   name: string;
@@ -19,29 +40,59 @@ interface BarChartData {
   name: string;
   value: number;
 }
+
+interface MarkerData {
+  lat: number;
+  lng: number;
+  label?: string;
+}
+
 export default function AdminDashboard() {
-  const [date, setDate] = useState<Date | undefined>(new Date())
+  const [date, setDate] = useState<Date | undefined>(new Date());
 
-  const temperatureData: ChartData[] = useMemo(() => [
-    { name: "Lun", temp: -2 },
-    { name: "Mar", temp: -1 },
-    { name: "Mié", temp: 0 },
-    { name: "Jue", temp: 1 },
-    { name: "Vie", temp: -1 },
-    { name: "Sáb", temp: -3 },
-    { name: "Dom", temp: -2 },
-  ], [])
+  // Datos de temperatura memorizados para optimizar el rendimiento
+  const temperatureData: ChartData[] = useMemo(
+    () => [
+      { name: "Lun", temp: -2 },
+      { name: "Mar", temp: -1 },
+      { name: "Mié", temp: 0 },
+      { name: "Jue", temp: 1 },
+      { name: "Vie", temp: -1 },
+      { name: "Sáb", temp: -3 },
+      { name: "Dom", temp: -2 },
+    ],
+    []
+  );
 
-  const alertDistributionData: BarChartData[] = useMemo(() => [
-    { name: "Helada", value: 45 },
-    { name: "Nieve", value: 30 },
-    { name: "Viento", value: 15 },
-    { name: "Granizo", value: 10 },
-  ], [])
+  // Datos de distribución de alertas memorizados
+  const alertDistributionData: BarChartData[] = useMemo(
+    () => [
+      { name: "Helada", value: 45 },
+      { name: "Nieve", value: 30 },
+      { name: "Viento", value: 15 },
+      { name: "Granizo", value: 10 },
+    ],
+    []
+  );
+
+  // Datos hardcodeados para el mapa
+  const mapCenter: { lat: number; lng: number } = useMemo(
+    () => ({ lat: 10.0, lng: -84.0 }), // Coordenadas de ejemplo
+    []
+  );
+
+  const markers: MarkerData[] = useMemo(
+    () => [
+      { lat: 10.1, lng: -84.1, label: "A" },
+      { lat: 9.9, lng: -83.9, label: "B" },
+    ],
+    []
+  );
 
   return (
-    <div className="flex-col md:flex">
-      <div className="border-b">
+    <div className="flex-col md:flex min-h-screen">
+      {/* Header */}
+      <header className="border-b">
         <div className="flex h-16 items-center px-4">
           <Link href="/" className="flex items-center space-x-2">
             <Logo className="h-8 w-8" />
@@ -49,101 +100,65 @@ export default function AdminDashboard() {
               FrostGuard
             </span>
           </Link>
-          <div className="ml-auto flex items-center space-x-4">
-            <Select>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Seleccionar región" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="norte">Región Norte</SelectItem>
-                <SelectItem value="centro">Región Centro</SelectItem>
-                <SelectItem value="sur">Región Sur</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
         </div>
-      </div>
-      <div className="flex-1 space-y-4 p-8 pt-6">
+      </header>
+
+      {/* Main Content */}
+      <main className="flex-1 space-y-4 p-8 pt-6">
         <Tabs defaultValue="overview" className="space-y-4">
-          <TabsList>
+          <TabsList className="grid grid-cols-3 gap-4">
             <TabsTrigger value="overview">Vista General</TabsTrigger>
             <TabsTrigger value="analytics">Analíticas</TabsTrigger>
             <TabsTrigger value="reports">Reportes</TabsTrigger>
           </TabsList>
+
+          {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-4">
+            {/* Statistics Cards */}
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    Alertas Activas
-                  </CardTitle>
+              <StatisticCard
+                title="Alertas Activas"
+                value={12}
+                description="+2 desde ayer"
+                icon={
                   <AlertTriangle className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">12</div>
-                  <p className="text-xs text-muted-foreground">+2 desde ayer</p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    Temperatura Promedio
-                  </CardTitle>
+                }
+              />
+              <StatisticCard
+                title="Temperatura Promedio"
+                value="-2°C"
+                description="-5°C desde ayer"
+                icon={
                   <ThermometerSnowflake className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">-2°C</div>
-                  <p className="text-xs text-muted-foreground">
-                    -5°C desde ayer
-                  </p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    Humedad Promedio
-                  </CardTitle>
-                  <Droplets className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">68%</div>
-                  <p className="text-xs text-muted-foreground">
-                    +5% desde ayer
-                  </p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    Velocidad del Viento
-                  </CardTitle>
-                  <Wind className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">15 km/h</div>
-                  <p className="text-xs text-muted-foreground">
-                    +2 km/h desde ayer
-                  </p>
-                </CardContent>
-              </Card>
+                }
+              />
+              <StatisticCard
+                title="Humedad Promedio"
+                value="68%"
+                description="+5% desde ayer"
+                icon={<Droplets className="h-4 w-4 text-muted-foreground" />}
+              />
+              <StatisticCard
+                title="Velocidad del Viento"
+                value="15 km/h"
+                description="+2 km/h desde ayer"
+                icon={<Wind className="h-4 w-4 text-muted-foreground" />}
+              />
             </div>
+
+            {/* Charts and Map Section */}
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+              {/* Mapa de Alertas */}
               <Card className="col-span-4">
                 <CardHeader>
                   <CardTitle>Mapa de Alertas</CardTitle>
                 </CardHeader>
-                <CardContent className="pl-2">
-                  <div className="h-[200px] w-full bg-muted relative rounded-md overflow-hidden">
-                    {/* Aquí iría un componente de mapa real */}
-                    <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
-                      <MapPin className="h-12 w-12" />
-                    </div>
-                    <div className="absolute top-2 left-2 bg-background p-2 rounded-md shadow">
-                      <p className="text-sm font-medium">12 Alertas Activas</p>
-                    </div>
-                  </div>
+                <CardContent className="pl-2 h-[400px]">
+                  <Map center={mapCenter} zoom={8} markers={markers} />
                 </CardContent>
               </Card>
+
+              {/* Pronóstico de Temperatura */}
               <Card className="col-span-3">
                 <CardHeader>
                   <CardTitle>Pronóstico de Temperatura</CardTitle>
@@ -198,25 +213,28 @@ export default function AdminDashboard() {
               </Card>
             </div>
           </TabsContent>
+
+          {/* Analytics Tab */}
           <TabsContent value="analytics" className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+              {/* Distribución de Alertas por Tipo */}
               <Card className="col-span-4">
                 <CardHeader>
                   <CardTitle>Distribución de Alertas por Tipo</CardTitle>
                 </CardHeader>
-                <CardContent className="pl-2">
-                  <div className="h-[200px]">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={alertDistributionData}>
-                        <XAxis dataKey="name" />
-                        <YAxis />
-                        <Bar dataKey="value" fill="#8884d8" />
-                        <Tooltip />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
+                <CardContent className="pl-2 h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={alertDistributionData}>
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Bar dataKey="value" fill="#8884d8" />
+                    </BarChart>
+                  </ResponsiveContainer>
                 </CardContent>
               </Card>
+
+              {/* Calendario de Eventos */}
               <Card className="col-span-3">
                 <CardHeader>
                   <CardTitle>Calendario de Eventos</CardTitle>
@@ -227,11 +245,14 @@ export default function AdminDashboard() {
                     selected={date}
                     onSelect={setDate}
                     className="rounded-md border"
+                    aria-label="Calendario de Eventos"
                   />
                 </CardContent>
               </Card>
             </div>
           </TabsContent>
+
+          {/* Reports Tab */}
           <TabsContent value="reports" className="space-y-4">
             <Card>
               <CardHeader>
@@ -242,8 +263,9 @@ export default function AdminDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="flex items-center">
-                    <div className="ml-4 space-y-1">
+                  {/* Report Item */}
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-1">
                       <p className="text-sm font-medium leading-none">
                         Reporte Mensual de Alertas
                       </p>
@@ -251,10 +273,16 @@ export default function AdminDashboard() {
                         Generado: 01/06/2023
                       </p>
                     </div>
-                    <div className="ml-auto font-medium">Descargar</div>
+                    <Link
+                      href="/download/report1"
+                      className="font-medium text-blue-500 hover:underline"
+                    >
+                      Descargar
+                    </Link>
                   </div>
-                  <div className="flex items-center">
-                    <div className="ml-4 space-y-1">
+                  {/* Report Item */}
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-1">
                       <p className="text-sm font-medium leading-none">
                         Análisis de Tendencias Climáticas
                       </p>
@@ -262,10 +290,16 @@ export default function AdminDashboard() {
                         Generado: 15/05/2023
                       </p>
                     </div>
-                    <div className="ml-auto font-medium">Descargar</div>
+                    <Link
+                      href="/download/report2"
+                      className="font-medium text-blue-500 hover:underline"
+                    >
+                      Descargar
+                    </Link>
                   </div>
-                  <div className="flex items-center">
-                    <div className="ml-4 space-y-1">
+                  {/* Report Item */}
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-1">
                       <p className="text-sm font-medium leading-none">
                         Resumen de Impacto Económico
                       </p>
@@ -273,14 +307,19 @@ export default function AdminDashboard() {
                         Generado: 30/04/2023
                       </p>
                     </div>
-                    <div className="ml-auto font-medium">Descargar</div>
+                    <Link
+                      href="/download/report3"
+                      className="font-medium text-blue-500 hover:underline"
+                    >
+                      Descargar
+                    </Link>
                   </div>
                 </div>
               </CardContent>
             </Card>
           </TabsContent>
         </Tabs>
-      </div>
+      </main>
     </div>
   );
 }
