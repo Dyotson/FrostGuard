@@ -16,7 +16,7 @@ class GuardianPositionDataSchema(Schema):
     altitude: int
     latitude_i: float
     longitude_i: float
-    guardian_zone: int
+    guardian_zone_id: int
 
 
 class CreateGuardianPositionDataSchema(Schema):
@@ -24,7 +24,7 @@ class CreateGuardianPositionDataSchema(Schema):
     altitude: int
     latitude_i: float
     longitude_i: float
-    guardian_zone: int
+    guardian_zone_id: int
 
 
 @api.get("/status")
