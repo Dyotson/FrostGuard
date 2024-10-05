@@ -12,3 +12,4 @@ class GuardianTelemetryData(models.Model):
     barometric_pressure = models.DecimalField(max_digits=15, decimal_places=12)
     relative_humidity = models.DecimalField(max_digits=15, decimal_places=12)
     temperature = models.DecimalField(max_digits=15, decimal_places=12)
+    timestamp = models.DateTimeField()
