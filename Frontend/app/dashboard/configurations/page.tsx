@@ -33,7 +33,7 @@ export default function ConfigurationPage() {
 
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
-    libraries: ["drawing"],
+    libraries: ["drawing", "maps"],
   });
 
   const addZone = () => {
@@ -109,9 +109,8 @@ export default function ConfigurationPage() {
               {zones.map((zone) => (
                 <li
                   key={zone.id}
-                  className={`p-2 border rounded cursor-pointer ${
-                    activeZone?.id === zone.id ? "bg-gray-200" : ""
-                  }`}
+                  className={`p-2 border rounded cursor-pointer ${activeZone?.id === zone.id ? "bg-gray-200" : ""
+                    }`}
                   onClick={() => {
                     if (isEditing && activeZone?.id !== zone.id) return;
                     setActiveZone(zone);
