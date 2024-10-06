@@ -6,23 +6,31 @@ import {
   Marker,
   Polygon,
   Circle,
+  InfoWindow,
 } from "@react-google-maps/api";
 import { useState } from "react";
-import { GuardianPositionData, GuardianTelemetryData } from "@/lib/api_utils";
+import { GuardianPositionData, GuardianTelemetryData } from "@/lib/interfaces";
 
 interface HomeMapProps {
-  zoneData: GuardianPositionData[];  // Array of GuardianPositionData
-  telemetryData: GuardianTelemetryData[];  // Array of GuardianTelemetryData
+  zoneData: GuardianPositionData[];
+  telemetryData: GuardianTelemetryData[];
   zoom: number;
 }
 
-export default function HomeMap({ zoneData, telemetryData, zoom }: HomeMapProps) {
+export default function HomeMap({
+  zoneData,
+  telemetryData,
+  zoom,
+}: HomeMapProps) {
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
     libraries: ["drawing", "maps", "places"],
   });
 
-  const [selectedTelemetry, setSelectedTelemetry] = useState<GuardianTelemetryData | null>(null);
+  const [selectedTelemetry, setSelectedTelemetry] =
+    useState<GuardianTelemetryData | null>(null);
+  const [activeMarkerPosition, setActiveMarkerPosition] =
+    useState<google.maps.LatLngLiteral | null>(null);
 
   if (loadError) {
     return <div>Error al cargar el mapa</div>;
@@ -32,45 +40,64 @@ export default function HomeMap({ zoneData, telemetryData, zoom }: HomeMapProps)
     return <div>Cargando mapa...</div>;
   }
 
-  const mapContainerStyle = {
-    width: "1350px",
-    height: "600px",
+  // Ordenamos las coordenadas del polígono
+  const sortCoordinatesClockwise = (
+    coordinates: { lat: number; lng: number }[]
+  ) => {
+    const centroid = coordinates.reduce(
+      (acc, point) => ({
+        lat: acc.lat + point.lat / coordinates.length,
+        lng: acc.lng + point.lng / coordinates.length,
+      }),
+      { lat: 0, lng: 0 }
+    );
+
+    return coordinates.sort((a, b) => {
+      const angleA = Math.atan2(a.lat - centroid.lat, a.lng - centroid.lng);
+      const angleB = Math.atan2(b.lat - centroid.lat, b.lng - centroid.lng);
+      return angleA - angleB;
+    });
   };
 
-  const mapOptions = {
-    mapTypeId: "satellite",
-  };
-
-  // Helper function to find the most recent telemetry data for a given sender
+  // Encuentra los datos de telemetría más recientes de un sender
   const findLatestTelemetryBySender = (sender: string) => {
     const filteredTelemetry = telemetryData
       .filter((data) => data.sender === sender)
-      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+      .sort(
+        (a, b) =>
+          new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+      );
 
     return filteredTelemetry.length > 0 ? filteredTelemetry[0] : null;
   };
 
-  // Handle marker click and select the most recent telemetry data
-  const handleMarkerClick = (guardianSender: string) => {
-    const latestTelemetry = findLatestTelemetryBySender(guardianSender);
+  // Maneja el clic en el marcador y selecciona la telemetría más reciente
+  const handleMarkerClick = (guardian: GuardianPositionData) => {
+    const latestTelemetry = findLatestTelemetryBySender(guardian.sender);
     setSelectedTelemetry(latestTelemetry);
+    setActiveMarkerPosition({
+      lat: guardian.latitude_i,
+      lng: guardian.longitude_i,
+    });
   };
 
   return (
-    <div>
+    <div className="w-full h-full">
       <GoogleMap
-        mapContainerStyle={mapContainerStyle}
+        mapContainerClassName="w-full h-full"
         center={{
           lat: zoneData[0].latitude_i,
           lng: zoneData[0].longitude_i,
         }}
         zoom={zoom}
-        options={mapOptions}
+        options={{ mapTypeId: "satellite" }}
       >
         {zoneData.map((guardian) => (
           <div key={guardian.id}>
             <Polygon
-              paths={guardian.guardian_zone.coordinates}
+              paths={sortCoordinatesClockwise(
+                guardian.guardian_zone.coordinates
+              )}
               options={{
                 fillColor: "#2196F3",
                 fillOpacity: 0.1,
@@ -88,7 +115,7 @@ export default function HomeMap({ zoneData, telemetryData, zoom }: HomeMapProps)
                 url: "/assets/map.svg",
                 scaledSize: new google.maps.Size(30, 40),
               }}
-              onClick={() => handleMarkerClick(guardian.sender)}  // Handle marker click based on sender
+              onClick={() => handleMarkerClick(guardian)}
             />
             <Circle
               center={{
@@ -98,25 +125,44 @@ export default function HomeMap({ zoneData, telemetryData, zoom }: HomeMapProps)
               radius={100}
               options={{
                 fillColor: "#FF0000",
-                fillOpacity: 0.2,
+                fillOpacity: 0.1,
                 strokeColor: "#FF0000",
-                strokeOpacity: 0.5,
+                strokeOpacity: 0.3,
                 strokeWeight: 1,
               }}
             />
           </div>
         ))}
-      </GoogleMap>
 
-      {selectedTelemetry && (
-        <div className="mt-4">
-          <h3>Datos de Telemetría del Guardian</h3>
-          <p><strong>Temperatura:</strong> {selectedTelemetry.temperature}°C</p>
-          <p><strong>Humedad Relativa:</strong> {selectedTelemetry.relative_humidity}%</p>
-          <p><strong>Presión Barométrica:</strong> {selectedTelemetry.barometric_pressure} hPa</p>
-          <p><strong>Timestamp:</strong> {selectedTelemetry.timestamp}</p>
-        </div>
-      )}
+        {activeMarkerPosition && selectedTelemetry && (
+          <InfoWindow
+            position={activeMarkerPosition}
+            onCloseClick={() => setActiveMarkerPosition(null)}
+          >
+            <div className="p-2 bg-white rounded shadow-md text-gray-800">
+              <h3 className="text-base font-semibold text-blue-600 mb-2">
+                Datos de Telemetría del Guardian
+              </h3>
+              <p className="mb-1">
+                <span className="font-semibold">Temperatura:</span>{" "}
+                {selectedTelemetry.temperature}°C
+              </p>
+              <p className="mb-1">
+                <span className="font-semibold">Humedad Relativa:</span>{" "}
+                {selectedTelemetry.relative_humidity}%
+              </p>
+              <p className="mb-1">
+                <span className="font-semibold">Presión Barométrica:</span>{" "}
+                {selectedTelemetry.barometric_pressure} hPa
+              </p>
+              <p className="text-sm text-gray-500">
+                <span className="font-semibold">Timestamp:</span>{" "}
+                {new Date(selectedTelemetry.timestamp).toLocaleString()}
+              </p>
+            </div>
+          </InfoWindow>
+        )}
+      </GoogleMap>
     </div>
   );
 }

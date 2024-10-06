@@ -1,10 +1,12 @@
-export interface GuardianPositionData {
-  id: number;
-  sender: string;
-  altitude: number;
-  latitude_i: number;
-  longitude_i: number;
-}
+import {
+  ControlMethod,
+  ControlMethodPayload,
+  GuardianZone,
+  FieldConfiguration,
+  GuardianTelemetryData,
+  GuardianPositionData,
+} from "./interfaces";
+
 
 // Función genérica para manejar las solicitudes HTTP
 async function apiRequest<T>(
@@ -26,7 +28,12 @@ async function apiRequest<T>(
   );
 
   if (!response.ok) {
-    throw new Error(`Error en la solicitud: ${response.statusText}`);
+    const errorText = await response.text();
+    throw new Error(`Error en la solicitud: ${response.status} ${errorText}`);
+  }
+
+  if (response.status === 204) {
+    return {} as T;
   }
 
   return await response.json();
@@ -83,15 +90,6 @@ export async function checkApiStatus(): Promise<{
 }
 
 
-export interface FieldConfiguration {
-  hasSprinklers: boolean;
-  hasRoof: boolean;
-  hasHeaters: boolean;
-  hasFans: boolean;
-  cropType: string;
-  description: string;
-}
-
 // Función para crear una nueva configuración de campo
 export async function createFieldConfiguration(
   payload: FieldConfiguration
@@ -109,33 +107,6 @@ export async function fetchAlertsData(): Promise<any[]> {
   }
 }
 
-export interface GuardianTelemetryData {
-  id: number;
-  sender: string;
-  barometric_pressure: number;
-  relative_humidity: number;
-  temperature: number;
-  timestamp: string;
-}
-
-export interface GuardianPositionData {
-  id: number;
-  sender: string;
-  altitude: number;
-  latitude_i: number;
-  longitude_i: number;
-  guardian_zone: {
-    id: number;
-    name: string;
-    has_sprinklers: boolean;
-    has_roof: boolean;
-    has_heaters: boolean;
-    has_fans: boolean;
-    crop_type: string;
-    description: string;
-    coordinates: { lat: number; lng: number }[];
-  };
-}
 
 // Obtener la temperatura más baja reciente
 export async function fetchLowestTemperatureData(): Promise<GuardianTelemetryData> {
@@ -153,6 +124,39 @@ export async function fetchGuardianPositionDataByZone(
   );
 }
 
-export async function fetchAllTelemetryData(): Promise<GuardianTelemetryData[]> {
+export async function fetchAllTelemetryData(): Promise<
+  GuardianTelemetryData[]
+> {
   return apiRequest<GuardianTelemetryData[]>("/guardian_telemetry_data");
+}
+
+
+// Obtener todas las zonas guardianas
+export async function fetchGuardianZones(): Promise<GuardianZone[]> {
+  return apiRequest<GuardianZone[]>("/guardian_zones/");
+}
+
+// Obtener todos los métodos de control
+export async function fetchControlMethods(): Promise<ControlMethod[]> {
+  return apiRequest<ControlMethod[]>("/control_methods/");
+}
+
+// Crear un nuevo método de control
+export async function createControlMethod(payload: {
+  name: string;
+  active: boolean;
+  guardian_zone_id: number;
+  control_type: string;
+}): Promise<ControlMethod> {
+  return apiRequest<ControlMethod>("/control_methods/", "POST", payload);
+}
+
+// Actualizar un método de control
+export async function updateControlMethod(id: number, payload: Partial<ControlMethod>): Promise<ControlMethod> {
+  return apiRequest<ControlMethod>(`/control_methods/${id}/`, "PATCH", payload);
+}
+
+// Eliminar un método de control por ID
+export async function deleteControlMethod(id: number): Promise<void> {
+  await apiRequest<void>(`/control_methods/${id}/`, "DELETE");
 }

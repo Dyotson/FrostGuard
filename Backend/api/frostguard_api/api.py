@@ -1,13 +1,18 @@
+from collections import defaultdict
 from datetime import datetime
 from typing import List
 
+from django.db.models import Max, Min
 from django.shortcuts import get_object_or_404
 from ninja import NinjaAPI, Router, Schema
 
-from django.db.models import Max, Min
-from collections import defaultdict
-
-from frostguard_api.models import GuardianAlert, GuardianPositionData, GuardianTelemetryData, GuardianZone, ControlMethod
+from frostguard_api.models import (
+    ControlMethod,
+    GuardianAlert,
+    GuardianPositionData,
+    GuardianTelemetryData,
+    GuardianZone,
+)
 
 # Instancia de la API principal
 api = NinjaAPI()
@@ -21,24 +26,24 @@ guardian_position_data_router = Router(tags=["Guardian Position Data"])
 class GuardianZoneSchema(Schema):
     id: int
     name: str
-    has_sprinklers: bool  
-    has_roof: bool  
-    has_heaters: bool  
-    has_fans: bool  
-    crop_type: str  
-    description: str  
-    coordinates: list  
+    has_sprinklers: bool
+    has_roof: bool
+    has_heaters: bool
+    has_fans: bool
+    crop_type: str
+    description: str
+    coordinates: list
 
 
 class CreateGuardianZoneSchema(Schema):
     name: str
-    has_sprinklers: bool  
-    has_roof: bool  
-    has_heaters: bool  
-    has_fans: bool  
-    crop_type: str  
-    description: str  
-    coordinates: list  
+    has_sprinklers: bool
+    has_roof: bool
+    has_heaters: bool
+    has_fans: bool
+    crop_type: str
+    description: str
+    coordinates: list
 
 
 class GuardianPositionDataSchema(Schema):
@@ -132,7 +137,7 @@ def get_most_recent_lowest_temperature(request):
         ).first()
 
     lowest_temperature_data = min(recent_telemetry.values(), key=lambda x: x.temperature)
-    
+
     return lowest_temperature_data
 
 
@@ -237,6 +242,7 @@ class ControlMethodSchema(Schema):
     name: str
     active: bool
     guardian_zone: GuardianZoneSchema
+    # Puede ser aspersion, roof, heater, fan
     control_type: str
 
 

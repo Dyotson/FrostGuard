@@ -4,21 +4,21 @@ import { geistSans, geistMono } from "./fonts";
 
 // Metadatos mejorados para SEO
 export const metadata: Metadata = {
-  //   metadataBase: new URL("http://frostguard.earth/"),
-  title: "FrostGuard - Protege tus cultivos",
+  //   metadataBase: new URL("http://frostaway.earth/"),
+  title: "FrostAway - Protege tus cultivos",
   description:
     "Plataforma para monitorear condiciones climáticas y proteger cultivos de manera efectiva.",
   //   openGraph: {
-  //     title: "FrostGuard",
+  //     title: "FrostAway",
   //     description: "Monitoreo de clima en tiempo real para cultivos.",
-  //     // url: "http://frostguard.earth/",
-  //     siteName: "FrostGuard",
+  //     // url: "http://frostaway.earth/",
+  //     siteName: "FrostAway",
   //     images: [
   //       {
   //         url: "/assets/logo.svg",
   //         width: 1200,
   //         height: 630,
-  //         alt: "FrostGuard logo",
+  //         alt: "FrostAway logo",
   //       },
   //     ],
   //     locale: "es_ES",
@@ -26,8 +26,8 @@ export const metadata: Metadata = {
   //   },
   //   twitter: {
   //     card: "summary_large_image",
-  //     site: "@frostguard",
-  //     title: "FrostGuard",
+  //     site: "@frostaway",
+  //     title: "FrostAway",
   //     description: "Protege tus cultivos con monitoreo en tiempo real.",
   //     images: ["/assets/logo.svg"],
   //   },
@@ -50,16 +50,16 @@ export default function RootLayout({
 
         {/* Metadatos de OpenGraph */}
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="FrostGuard - Protege tus cultivos" />
+        <meta property="og:title" content="FrostAway - Protege tus cultivos" />
         <meta property="og:description" content="Plataforma para monitorear condiciones climáticas y proteger cultivos de manera efectiva." />
         <meta property="og:image" content="/assets/logo.svg" />
-        {/* <meta property="og:url" content="http://frostguard.earth/" /> */}
+        {/* <meta property="og:url" content="http://frostaway.earth/" /> */}
         <meta property="og:locale" content="es_ES" />
 
         {/* Metadatos de Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@frostguard" />
-        <meta name="twitter:title" content="FrostGuard" />
+        <meta name="twitter:site" content="@frostaway" />
+        <meta name="twitter:title" content="FrostAway" />
         <meta name="twitter:description" content="Protege tus cultivos con monitoreo en tiempo real." />
         <meta name="twitter:image" content="/assets/logo.svg" />
       </head>
