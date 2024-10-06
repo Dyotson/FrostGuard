@@ -25,8 +25,8 @@ class GuardianAlert(models.Model):
 class GuardianPositionData(models.Model):
     sender = models.CharField(max_length=255, unique=True)
     altitude = models.BigIntegerField()
-    latitude_i = models.BigIntegerField()
-    longitude_i = models.BigIntegerField()
+    latitude_i = models.DecimalField(max_digits=30, decimal_places=12)
+    longitude_i = models.DecimalField(max_digits=30, decimal_places=12)
     guardian_zone = models.ForeignKey(GuardianZone, on_delete=models.PROTECT, null=True)
 
 
