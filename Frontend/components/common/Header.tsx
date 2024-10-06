@@ -30,7 +30,7 @@ const Header: React.FC = () => {
         </Link>
         <Link
           className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:underline underline-offset-4"
-          href="#about"
+          href="/aboutus"
         >
           About Us
         </Link>
