@@ -173,7 +173,6 @@ export default function ConfigurationForm({
             onChange={handleInputChange}
             placeholder="Describe las características de esta zona"
             className="mt-1"
-            required
           />
         </div>
 

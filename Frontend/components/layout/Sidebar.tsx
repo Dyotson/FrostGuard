@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, AlertTriangle, Bell, Sprout } from "lucide-react";
-import { Settings } from "lucide-react";
+import { Home, AlertTriangle, Bell, Sprout, Settings } from "lucide-react";
+import Logo from "@/components/common/Logo";
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -38,7 +38,12 @@ export default function Sidebar() {
 
   return (
     <nav className="bg-white p-4 flex flex-col h-full shadow-lg">
-      <h1 className="text-2xl font-bold mb-8">FrostAway</h1>
+      <Link href="/" className="flex items-center space-x-2 mb-6">
+        <Logo className="h-8 w-8" />
+        <span className="text-lg font-semibold text-gray-800 dark:text-white">
+          FrostAway
+        </span>
+      </Link>
       <ul className="space-y-2">
         {menuItems.map((item) => {
           const isActive = pathname === item.href;

@@ -91,6 +91,7 @@ export default function ControlMethodsPage() {
   const [newControlName, setNewControlName] = useState("");
   const [selectedType, setSelectedType] = useState<ControlType | null>(null);
   const [selectedZone, setSelectedZone] = useState<string>("Zona 1");
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
   const zones = ["Zona 1", "Zona 2", "Zona 3"];
 
@@ -117,6 +118,7 @@ export default function ControlMethodsPage() {
       setNewControlName("");
       setSelectedType(null);
       setSelectedZone("Zona 1");
+      setIsDialogOpen(false);
     }
   };
 
@@ -179,7 +181,7 @@ export default function ControlMethodsPage() {
           </Card>
         ))}
 
-        <Dialog>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Card className="flex flex-col items-center justify-center p-6 hover:bg-gray-50 transition-colors cursor-pointer">
               <Plus className="h-8 w-8 text-gray-400" />
@@ -197,7 +199,6 @@ export default function ControlMethodsPage() {
               </DialogDescription>
             </DialogHeader>
 
-            {/* Mostrar los tipos de control como botones */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
               {controlTypes.map((type) => (
                 <Button
@@ -224,7 +225,6 @@ export default function ControlMethodsPage() {
               />
             </div>
 
-            {/* Seleccionar zona */}
             <div className="mt-4">
               <Label htmlFor="zone">Asignar Zona</Label>
               <Select value={selectedZone} onValueChange={setSelectedZone}>
