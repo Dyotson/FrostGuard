@@ -12,7 +12,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         zone_1 = GuardianZone.objects.create(
-            name="La Araucana",
+            name="Zona 1",
             has_sprinklers=True,
             has_roof=True,
             has_heaters=True,
