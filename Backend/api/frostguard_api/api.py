@@ -5,6 +5,9 @@ from typing import List
 from django.db.models import Max, Min
 from django.shortcuts import get_object_or_404
 from ninja import NinjaAPI, Router, Schema
+from decimal import Decimal
+from django.utils import timezone
+from datetime import timedelta
 
 from frostguard_api.models import (
     ControlMethod,
@@ -13,6 +16,8 @@ from frostguard_api.models import (
     GuardianTelemetryData,
     GuardianZone,
 )
+
+from frostguard_api.twilio import send_twilio_message
 
 # Instancia de la API principal
 api = NinjaAPI()
@@ -286,11 +291,69 @@ def delete_control_method(request, control_method_id: int):
     return {"success": True}
 
 
+demo_router = Router(tags=["Demo Endpoints"])
+
+
+@demo_router.post("/execute_cold_warning")
+def execute_cold_warning(request):
+    sender = "!fa9ffc24"
+
+    guardian_position_data = get_object_or_404(GuardianPositionData, sender=sender)
+    guardian_zone = guardian_position_data.guardian_zone
+
+    guardian_telemetry_data = GuardianTelemetryData.objects.create(
+        sender=sender,
+        barometric_pressure=Decimal("941"),
+        relative_humidity=Decimal("53.6"),
+        temperature=Decimal("-0.32"),
+        timestamp=timezone.now().isoformat()
+    )
+
+    control_methods_list = []
+
+    if guardian_zone.has_fans:
+        control_methods_list.append("Fans")
+
+    if guardian_zone.has_heaters:
+        control_methods_list.append("Heaters")
+
+    if guardian_zone.has_roof:
+        control_methods_list.append("Roofs")
+
+    if guardian_zone.has_sprinklers:
+        control_methods_list.append("Sprinklers")
+
+
+    guardian_alert = GuardianAlert.objects.create(
+        guardian_zone=guardian_zone,
+        start_datetime=timezone.now() + timedelta(hours=1),
+        end_datetime=timezone.now() + timedelta(hours=3),
+        message_recommendation=f"Combat System: {', '.join(control_methods_list[:-1]) + (' and ' + control_methods_list[-1] if control_methods_list else '')}",
+        active=True
+    )
+
+    send_twilio_message(
+        guardian_position_data,
+        guardian_telemetry_data,
+        guardian_alert,
+        control_methods_list,
+    )
+
+
+@demo_router.get("/test_send_whatsapp")
+def test_send_whatsapp(request):
+    guardian_zone = GuardianZone.objects.first()
+    send_twilio_message(guardian_zone)
+
+
+
+
 api.add_router("/control_methods", control_methods_router)
 api.add_router("/guardian_position_data", guardian_position_data_router)
 api.add_router("/guardian_telemetry_data", guardian_telemetry_data_router)
 api.add_router("/guardian_alerts", guardian_alerts_router)
 api.add_router("/guardian_zones", guardian_zones_router)
+api.add_router("/demo", demo_router)
 
 
 @api.get("/status")
