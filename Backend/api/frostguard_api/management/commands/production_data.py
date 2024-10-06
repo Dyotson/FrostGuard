@@ -81,8 +81,8 @@ class Command(BaseCommand):
         GuardianPositionData.objects.create(
             sender="!fa9ffc24",
             altitude=619,
-            latitude_i=Decimal('-33.515110'),
-            longitude_i=Decimal('-70.556058'),
+            latitude_i=Decimal('-33.523033'),
+            longitude_i=Decimal('-70.568807'),
             guardian_zone=zone_1
         )
 
