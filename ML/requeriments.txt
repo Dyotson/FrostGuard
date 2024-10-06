@@ -1,0 +1,10 @@
+torch-scatter 
+torch-sparse
+torch_geometric
+tsl
+pytorch-lightning
+open-meteo
+openmeteo-requests
+requests-cache
+retry-requests
+torch-spatiotemporal
