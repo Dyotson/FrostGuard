@@ -152,3 +152,7 @@ export async function fetchGuardianPositionDataByZone(
     `/guardian_position_data?zone_name=${zone_name}`
   );
 }
+
+export async function fetchAllTelemetryData(): Promise<GuardianTelemetryData[]> {
+  return apiRequest<GuardianTelemetryData[]>("/guardian_telemetry_data");
+}
