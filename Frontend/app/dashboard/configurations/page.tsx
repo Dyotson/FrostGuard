@@ -21,7 +21,7 @@ interface ZoneConfiguration {
 }
 
 const initialZones: ZoneConfiguration[] = [];
-const center = { lat: 40.7128, lng: -74.006 };
+const center = { lat: -33.5230, lng: -70.5687 };
 
 export default function ConfigurationPage() {
   const [zones, setZones] = useState<ZoneConfiguration[]>(initialZones);
