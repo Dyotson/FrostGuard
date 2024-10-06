@@ -296,7 +296,7 @@ demo_router = Router(tags=["Demo Endpoints"])
 
 @demo_router.post("/execute_cold_warning")
 def execute_cold_warning(request):
-    sender = "!fa9ffc24"
+    sender = "!fa6f163c"
 
     guardian_position_data = get_object_or_404(GuardianPositionData, sender=sender)
     guardian_zone = guardian_position_data.guardian_zone

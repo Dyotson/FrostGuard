@@ -3,9 +3,12 @@ from frostguard_api.models import (
     GuardianPositionData, 
     GuardianZone, 
     ZoneContact,
-    ControlMethod
+    ControlMethod,
+    GuardianAlert
 )
 from decimal import Decimal
+from django.utils import timezone
+from datetime import timedelta
 
 class Command(BaseCommand):
     help = 'Seed the database with initial data'
@@ -79,11 +82,27 @@ class Command(BaseCommand):
         )
 
         GuardianPositionData.objects.create(
-            sender="!fa9ffc24",
+            sender="!fa6f163c",
             altitude=619,
             latitude_i=Decimal('-33.523033'),
             longitude_i=Decimal('-70.568807'),
             guardian_zone=zone_1
+        )
+
+        GuardianAlert.objects.create(
+            guardian_zone=zone_1,
+            start_datetime=timezone.now() - timedelta(days=1),
+            end_datetime=timezone.now() - timedelta(days=1) + timedelta(hours=2),
+            message_recommendation="Utilizar estufas para calentas las plantas",
+            active=True
+        )
+
+        GuardianAlert.objects.create(
+            guardian_zone=zone_1,
+            start_datetime=timezone.now() - timedelta(days=1) - timedelta(hours=5),
+            end_datetime=timezone.now() - timedelta(days=1) - timedelta(hours=2),
+            message_recommendation="Utilizar estufas para calentas las plantas",
+            active=False
         )
 
         self.stdout.write(self.style.SUCCESS('Successfully seeded the database'))
