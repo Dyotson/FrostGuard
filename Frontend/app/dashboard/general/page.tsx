@@ -20,7 +20,7 @@ import {
 import { GuardianPositionData, GuardianTelemetryData } from "@/lib/interfaces";
 
 export default function GeneralPage() {
-  const [selectedZone, setSelectedZone] = useState<string>("Zone 1");
+  const [selectedZone, setSelectedZone] = useState<string>("Zona 1");
   const [zoneData, setZoneData] = useState<GuardianPositionData[]>([]);
   const [telemetryData, setTelemetryData] = useState<GuardianTelemetryData[]>(
     []
@@ -65,10 +65,10 @@ export default function GeneralPage() {
       <div className="mb-6 flex justify-between items-center">
         <Select value={selectedZone} onValueChange={setSelectedZone}>
           <SelectTrigger className="w-[180px] transition duration-200 ease-in-out hover:shadow-md">
-            <SelectValue placeholder="Select zone" />
+            <SelectValue placeholder="Seleccionar zona" />
           </SelectTrigger>
           <SelectContent>
-            {["Zone 1", "Zone 2", "Zone 3"].map((zone) => (
+            {["Zona 1", "Zona 2", "Zona 3"].map((zone) => (
               <SelectItem key={zone} value={zone}>
                 {zone}
               </SelectItem>
@@ -79,14 +79,14 @@ export default function GeneralPage() {
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-4">
         <StatCard
-          title="Lowest Recent Temperature"
+          title="Temperatura Más Baja Reciente"
           value={
             climateData ? `${roundValue(climateData.temperature)}°C` : "N/A"
           }
           icon={<ThermometerSnowflake className="h-4 w-4 text-blue-500" />}
         />
         <StatCard
-          title="Relative Humidity"
+          title="Humedad Relativa"
           value={
             climateData
               ? `${roundValue(climateData.relative_humidity)}%`
@@ -95,7 +95,7 @@ export default function GeneralPage() {
           icon={<Droplets className="h-4 w-4 text-blue-300" />}
         />
         <StatCard
-          title="Barometric Pressure"
+          title="Presión Barométrica"
           value={
             climateData
               ? `${roundValue(climateData.barometric_pressure)} hPa`
@@ -107,7 +107,7 @@ export default function GeneralPage() {
 
       <Card className="mb-4 shadow-md">
         <CardHeader>
-          <CardTitle>Terrain Map</CardTitle>
+          <CardTitle>Mapa del Terreno</CardTitle>
         </CardHeader>
         <CardContent>
           {zoneData.length > 0 ? (
@@ -119,7 +119,7 @@ export default function GeneralPage() {
               />
             </div>
           ) : (
-            <p>No data available for this zone</p>
+            <p>No hay datos disponibles para esta zona</p>
           )}
         </CardContent>
       </Card>
