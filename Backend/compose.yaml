@@ -1,27 +1,6 @@
 version: "3.8"
 
 services:
-  traefik:
-    image: traefik:v2.10
-    command:
-      - "--api.insecure=true"                            # Optional: access to the Traefik dashboard
-      - "--api.dashboard=true"
-      - "--providers.docker=true"                        # Enable Docker as a provider
-      - "--entrypoints.web.address=:80"                  # HTTP entrypoint
-      - "--entrypoints.websecure.address=:443"           # HTTPS entrypoint
-      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"  # Enable TLS challenge for Let's Encrypt
-      - "--certificatesresolvers.myresolver.acme.email=i.munoz.repetto@gmail.com"  # Replace with your email
-      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json" # Store the certs in this file
-      - "--log.level=INFO"
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"  # Give Traefik access to Docker socket
-      - "./letsencrypt:/letsencrypt"                    # Store SSL certificates here
-    restart: always
-
-
   api:
     image: python:latest
     restart: always
@@ -37,15 +16,6 @@ services:
     command: sh -c "pip install -r /app/requirements.txt && python /app/manage.py runserver 0.0.0.0:8000"
     env_file:
       - .env
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.api.rule=Host(`frostback.earth`)"   # Replace with your domain
-      - "traefik.http.routers.api.entrypoints=websecure"
-      - "traefik.http.routers.api.tls.certresolver=myresolver"
-      - "traefik.http.services.api.loadbalancer.server.port=8000" # Replace with your container's internal port
-      - "traefik.http.routers.api.middlewares=https-redirect"
-      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
-
 
   postgres:
     image: postgres:latest
