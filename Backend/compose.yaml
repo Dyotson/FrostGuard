@@ -1,4 +1,31 @@
+version: "3.8"
+
 services:
+  traefik:
+    image: traefik:v2.9
+    container_name: traefik
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - web
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.httpChallenge.entryPoint=web"
+      - "--certificatesresolvers.myresolver.acme.email=i.munoz.repetto@gmail.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      - "--certificatesresolvers.myresolver.acme.httpChallenge=true"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./letsencrypt:/letsencrypt
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.frostback.earth`)"
+
   api:
     image: python:latest
     restart: always
@@ -6,17 +33,21 @@ services:
       - "8000:8000"
     container_name: api
     networks:
-      db:
-        aliases:
-          - api.local
-      mqtt:
-        aliases:
-          - api.local
+      - web
+      - db
+      - mqtt
     volumes:
       - ./api:/app
     command: sh -c "pip install -r /app/requirements.txt && python /app/manage.py runserver 0.0.0.0:8000"
     env_file:
       - .env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`api.frostback.earth`)"
+      - "traefik.http.routers.api.entrypoints=web"
+      - "traefik.http.routers.api-secure.rule=Host(`api.frostback.earth`)"
+      - "traefik.http.routers.api-secure.entrypoints=websecure"
+      - "traefik.http.routers.api-secure.tls.certresolver=myresolver"
 
   postgres:
     image: postgres:latest
@@ -34,7 +65,6 @@ services:
       POSTGRES_DB: postgres
     volumes:
       - ./postgres:/var/lib/postgresql/data
-    
 
   mosquitto:
     image: eclipse-mosquitto:latest
@@ -53,6 +83,7 @@ services:
       - ./mosquitto/log:/mosquitto/log
 
 networks:
+  web:
   db:
   mqtt:
 
@@ -60,3 +91,4 @@ volumes:
   api:
   postgres:
   mosquitto:
+  letsencrypt:
