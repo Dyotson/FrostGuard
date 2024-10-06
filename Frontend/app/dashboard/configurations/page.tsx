@@ -87,7 +87,7 @@ export default function ConfigurationPage() {
   if (!isLoaded) return <div>Cargando mapa...</div>;
 
   return (
-    <Card className="shadow-md w-full max-w-4xl mx-auto">
+    <Card className="shadow-md w-full mx-auto">
       <CardHeader>
         <CardTitle className="text-2xl font-bold">
           Configuración del Terreno

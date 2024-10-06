@@ -26,7 +26,7 @@ export default function Sidebar() {
     },
     {
       name: "Métodos de Control",
-      href: "/dashboard/control",
+      href: "/dashboard/control_methods",
       icon: <Sprout className="mr-2" />,
     },
     {
