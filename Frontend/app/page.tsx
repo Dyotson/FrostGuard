@@ -36,9 +36,9 @@ export default function HomePage() {
                     Go to Dashboard
                   </Button>
                 </Link>
-                <Link href="/aboutus" className="w-full sm:w-auto">
+                <Link href="https://github.com/Dyotson/FrostGuard" className="w-full sm:w-auto">
                   <Button variant="outline" className="w-full sm:w-auto">
-                    Learn more
+                    Learn more (GitHub Repo)
                   </Button>
                 </Link>
               </div>
