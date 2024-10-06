@@ -68,7 +68,9 @@ export default function AlertCard({
 
         <div className="flex items-center text-gray-600 bg-white p-2 rounded-md">
           <Clock className="w-4 h-4 mr-2" />
-          <span className="text-sm font-medium">Duración: {duration}</span>
+          <span className="text-lg font-medium font-semibold">
+            Duración: {duration}
+          </span>
         </div>
       </CardContent>
     </Card>

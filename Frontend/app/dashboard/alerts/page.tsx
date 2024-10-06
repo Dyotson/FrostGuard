@@ -64,9 +64,12 @@ export default function AlertsPage() {
     }
   };
 
-  // Esconder la página hasta que se carguen los datos
   if (loading) {
-    return null; // No mostrar nada mientras se carga
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-gray-500">Cargando alertas...</p>
+      </div>
+    );
   }
 
   if (error) {
@@ -79,7 +82,7 @@ export default function AlertsPage() {
   }
 
   return (
-    <div className="space-y-8 max-w-4xl mx-auto p-4">
+    <div className="space-y-8 mx-auto">
       {/* Alertas Activas */}
       <Card className="shadow-md rounded-md">
         <CardHeader className="flex flex-row items-center space-x-2 bg-[#ff966a] text-white rounded-t-md">

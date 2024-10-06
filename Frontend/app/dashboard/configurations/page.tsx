@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, Trash2, Edit2, XCircle } from "lucide-react";
+import { PlusCircle, Trash2, Edit2 } from "lucide-react";
 import { useJsApiLoader } from "@react-google-maps/api";
 import ConfigurationMap from "@/components/ConfigurationMap";
 import ConfigurationForm from "@/components/ConfigurationForm";
@@ -87,15 +87,15 @@ export default function ConfigurationPage() {
   if (!isLoaded) return <div>Cargando mapa...</div>;
 
   return (
-    <Card className="shadow-md w-full max-w-4xl mx-auto">
+    <Card className="shadow-md w-full mx-auto">
       <CardHeader>
         <CardTitle className="text-2xl font-bold">
           Configuración del Terreno
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex space-x-4">
-          <div className="w-1/3">
+        <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4">
+          <div className="lg:w-1/3 w-full">
             <Button
               type="button"
               onClick={addZone}
@@ -109,8 +109,9 @@ export default function ConfigurationPage() {
               {zones.map((zone) => (
                 <li
                   key={zone.id}
-                  className={`p-2 border rounded cursor-pointer ${activeZone?.id === zone.id ? "bg-gray-200" : ""
-                    }`}
+                  className={`p-2 border rounded cursor-pointer ${
+                    activeZone?.id === zone.id ? "bg-gray-200" : ""
+                  }`}
                   onClick={() => {
                     if (isEditing && activeZone?.id !== zone.id) return;
                     setActiveZone(zone);
@@ -151,7 +152,7 @@ export default function ConfigurationPage() {
             </ul>
           </div>
 
-          <div className="w-2/3 h-96">
+          <div className="lg:w-2/3 w-full h-96">
             <ConfigurationMap
               center={center}
               zones={zones}
