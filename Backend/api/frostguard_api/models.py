@@ -10,6 +10,9 @@ class GuardianZone(models.Model):
     description = models.CharField(max_length=255, default="")
     coordinates = models.JSONField(default=list)
 
+    def get_phone_numbers(self):
+        return [contact.phone_number for contact in self.zone_contact.all()]
+
 
 class GuardianAlert(models.Model):
     start_datetime = models.DateTimeField()
@@ -33,3 +36,12 @@ class GuardianTelemetryData(models.Model):
     relative_humidity = models.DecimalField(max_digits=15, decimal_places=12)
     temperature = models.DecimalField(max_digits=15, decimal_places=12)
     timestamp = models.DateTimeField()
+
+
+class ZoneContact(models.Model):
+    phone_number = models.CharField(max_length=20)
+    guardian_zone = models.ForeignKey(
+        GuardianZone, 
+        related_name="zone_contact", 
+        on_delete=models.PROTECT
+    )

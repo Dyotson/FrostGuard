@@ -3,7 +3,8 @@ from frostguard_api.models import (
     GuardianPositionData, 
     GuardianTelemetryData, 
     GuardianZone, 
-    GuardianAlert
+    GuardianAlert,
+    ZoneContact,
 )
 from django.utils import timezone
 from decimal import Decimal
@@ -76,6 +77,21 @@ class Command(BaseCommand):
                     "lng": -73.546295,
                 },
             ]
+        )
+
+        ZoneContact.objects.create(
+            phone_number="+56976247701",
+            guardian_zone=zone_1
+        )
+
+        ZoneContact.objects.create(
+            phone_number="+56965839529",
+            guardian_zone=zone_1
+        )
+
+        ZoneContact.objects.create(
+            phone_number="+56976247701",
+            guardian_zone=zone_2
         )
 
         GuardianAlert.objects.create(
