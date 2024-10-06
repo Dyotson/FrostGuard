@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class GuardianZone(models.Model):
     name = models.CharField(max_length=255, unique=True)
     has_sprinklers = models.BooleanField(default=False)
@@ -41,8 +42,8 @@ class GuardianTelemetryData(models.Model):
 class ZoneContact(models.Model):
     phone_number = models.CharField(max_length=20)
     guardian_zone = models.ForeignKey(
-        GuardianZone, 
-        related_name="zone_contact", 
+        GuardianZone,
+        related_name="zone_contact",
         on_delete=models.PROTECT
     )
 
@@ -51,8 +52,8 @@ class ControlMethod(models.Model):
     name = models.CharField(max_length=255)
     active = models.BooleanField()
     guardian_zone = models.ForeignKey(
-        GuardianZone, 
-        related_name="control_method", 
+        GuardianZone,
+        related_name="control_method",
         on_delete=models.PROTECT
     )
     control_type = models.CharField(

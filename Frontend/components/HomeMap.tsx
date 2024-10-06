@@ -8,7 +8,7 @@ import {
   Circle,
 } from "@react-google-maps/api";
 import { useState } from "react";
-import { GuardianPositionData, GuardianTelemetryData } from "@/lib/api_utils";
+import { GuardianPositionData, GuardianTelemetryData } from "@/lib/interfaces";
 
 interface HomeMapProps {
   zoneData: GuardianPositionData[];  // Array of GuardianPositionData

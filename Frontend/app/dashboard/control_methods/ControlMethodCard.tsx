@@ -1,0 +1,88 @@
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { Card } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Info, Trash2 } from "lucide-react";
+import { ControlMethod } from "@/lib/interfaces";
+
+interface ControlType {
+  icon: React.ReactNode;
+  name: string;
+  description: string;
+}
+
+interface ControlMethodCardProps {
+  control: ControlMethod;
+  controlTypes: Record<string, ControlType>;
+  onToggleControl: (id: number) => void;
+  onRemoveControl: (id: number) => void;
+}
+
+export default function ControlMethodCard({
+  control,
+  controlTypes,
+  onToggleControl,
+  onRemoveControl,
+}: ControlMethodCardProps) {
+  const controlType = controlTypes[control.control_type];
+
+  // Validación adicional para evitar errores en la renderización de controlType
+  if (!controlType) {
+    console.error(
+      `Tipo de control no encontrado para: ${control.control_type}`
+    );
+    return null; // No renderizamos nada si no encontramos el tipo de control
+  }
+
+  return (
+    <Card className="flex flex-col items-center p-6 bg-white shadow-md rounded-lg hover:shadow-xl transition-shadow duration-300 transform hover:scale-105">
+      <div className="mb-4">{controlType.icon}</div>
+
+      <h3 className="text-lg font-semibold text-gray-800 mb-1">
+        {control.name}
+      </h3>
+
+      <div className="flex items-center space-x-2 mb-4">
+        <Switch
+          checked={control.active}
+          onCheckedChange={() => onToggleControl(control.id)}
+        />
+        <span className="text-sm text-gray-500">
+          {control.active ? "Activado" : "Desactivado"}
+        </span>
+      </div>
+
+      <div className="flex space-x-2">
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="outline" size="icon" aria-label="Info">
+              <Info className="w-4 h-4" />
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{control.name}</DialogTitle>
+              <DialogDescription>{controlType.description}</DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+
+        <Button
+          variant="destructive"
+          size="icon"
+          onClick={() => onRemoveControl(control.id)}
+          aria-label="Eliminar"
+        >
+          <Trash2 className="w-4 h-4" />
+        </Button>
+      </div>
+    </Card>
+  );
+}
