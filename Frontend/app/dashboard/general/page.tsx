@@ -15,22 +15,22 @@ import { ThermometerSnowflake, Droplets, Wind } from "lucide-react";
 import {
   fetchLowestTemperatureData,
   fetchGuardianPositionDataByZone,
+  fetchAllTelemetryData,  // Assuming you have a method to fetch telemetry data
   GuardianPositionData,
   GuardianTelemetryData,
 } from "@/lib/api_utils";
 
 export default function GeneralPage() {
   const [selectedZone, setSelectedZone] = useState<string>("Zona 1");
-  const [zoneData, setZoneData] = useState<GuardianPositionData | null>(null);
-  const [climateData, setClimateData] = useState<GuardianTelemetryData | null>(
-    null
-  );
+  const [zoneData, setZoneData] = useState<GuardianPositionData[]>([]);
+  const [telemetryData, setTelemetryData] = useState<GuardianTelemetryData[]>([]);
+  const [climateData, setClimateData] = useState<GuardianTelemetryData | null>(null);
 
   useEffect(() => {
     const fetchZoneData = async () => {
       const response = await fetchGuardianPositionDataByZone(selectedZone);
       if (response.length > 0) {
-        setZoneData(response[0]);
+        setZoneData(response);  // Set the entire response array
       }
     };
 
@@ -46,14 +46,16 @@ export default function GeneralPage() {
     fetchClimateData();
   }, []);
 
-  const roundValue = (value: number) => Math.round(value * 100) / 100;
+  useEffect(() => {
+    const fetchTelemetryData = async () => {
+      const response = await fetchAllTelemetryData();  // Fetch telemetry data for all guardians
+      setTelemetryData(response);
+    };
 
-  const mapCenter = zoneData
-    ? {
-        lat: zoneData.latitude_i,
-        lng: zoneData.longitude_i,
-      }
-    : { lat: 0, lng: 0 };
+    fetchTelemetryData();
+  }, []);
+
+  const roundValue = (value: number) => Math.round(value * 100) / 100;
 
   return (
     <>
@@ -105,15 +107,11 @@ export default function GeneralPage() {
           <CardTitle>Mapa del Terreno</CardTitle>
         </CardHeader>
         <CardContent className="h-[600px]">
-          {zoneData ? (
+          {zoneData.length > 0 ? (
             <HomeMap
-              center={mapCenter}
+              zoneData={zoneData}
+              telemetryData={telemetryData}  // Pass telemetry data to HomeMap
               zoom={15}
-              markerPosition={{
-                lat: zoneData.latitude_i,
-                lng: zoneData.longitude_i,
-              }}
-              polygonCoordinates={zoneData.guardian_zone.coordinates}
             />
           ) : (
             <p>No hay datos disponibles para esta zona</p>
