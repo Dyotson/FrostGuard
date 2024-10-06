@@ -39,7 +39,7 @@ export default function ConfigurationPage() {
   const addZone = () => {
     const newZone: ZoneConfiguration = {
       id: Date.now().toString(),
-      name: `Zona ${zones.length + 1}`,
+      name: `Zone ${zones.length + 1}`,
       hasSprinklers: false,
       hasRoof: false,
       hasHeaters: false,
@@ -83,14 +83,14 @@ export default function ConfigurationPage() {
     setEditZone(null);
   };
 
-  if (loadError) return <div>Error al cargar el mapa</div>;
-  if (!isLoaded) return <div>Cargando mapa...</div>;
+  if (loadError) return <div>Error loading map</div>;
+  if (!isLoaded) return <div>Loading map...</div>;
 
   return (
     <Card className="shadow-md w-full mx-auto">
       <CardHeader>
         <CardTitle className="text-2xl font-bold">
-          Configuración del Terreno
+          Terrain Configuration
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -103,15 +103,14 @@ export default function ConfigurationPage() {
               className="w-full mb-4"
               disabled={isEditing}
             >
-              <PlusCircle className="mr-2 h-4 w-4" /> Agregar Zona
+              <PlusCircle className="mr-2 h-4 w-4" /> Add Zone
             </Button>
             <ul className="space-y-2">
               {zones.map((zone) => (
                 <li
                   key={zone.id}
-                  className={`p-2 border rounded cursor-pointer ${
-                    activeZone?.id === zone.id ? "bg-gray-200" : ""
-                  }`}
+                  className={`p-2 border rounded cursor-pointer ${activeZone?.id === zone.id ? "bg-gray-200" : ""
+                    }`}
                   onClick={() => {
                     if (isEditing && activeZone?.id !== zone.id) return;
                     setActiveZone(zone);

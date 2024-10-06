@@ -33,12 +33,12 @@ export default function ControlMethodCard({
 }: ControlMethodCardProps) {
   const controlType = controlTypes[control.control_type];
 
-  // Validación adicional para evitar errores en la renderización de controlType
+  // Additional validation to prevent errors in rendering controlType
   if (!controlType) {
     console.error(
-      `Tipo de control no encontrado para: ${control.control_type}`
+      `Control type not found for: ${control.control_type}`
     );
-    return null; // No renderizamos nada si no encontramos el tipo de control
+    return null; // We don't render anything if the control type is not found
   }
 
   return (
@@ -55,7 +55,7 @@ export default function ControlMethodCard({
           onCheckedChange={() => onToggleControl(control.id)}
         />
         <span className="text-sm text-gray-500">
-          {control.active ? "Activado" : "Desactivado"}
+          {control.active ? "Activated" : "Deactivated"}
         </span>
       </div>
 
@@ -78,7 +78,7 @@ export default function ControlMethodCard({
           variant="destructive"
           size="icon"
           onClick={() => onRemoveControl(control.id)}
-          aria-label="Eliminar"
+          aria-label="Delete"
         >
           <Trash2 className="w-4 h-4" />
         </Button>

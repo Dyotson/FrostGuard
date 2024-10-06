@@ -27,20 +27,21 @@ export default function TemperatureChart({ data }: TemperatureChartProps) {
           type="monotone"
           dataKey="proyeccion"
           stroke="#8884d8"
-          name="Proyección"
+          name="Projection"
         />
         <Line
           type="monotone"
           dataKey="historico"
           stroke="#82ca9d"
-          name="Histórico"
+          name="Historical"
         />
         {/* Línea roja en cero */}
         <ReferenceLine
           y={0}
           stroke="red"
           strokeDasharray="3 3"
-          name="Estado Crítico"
+          name="Critical Status
+"
         />
       </LineChart>
     </ResponsiveContainer>

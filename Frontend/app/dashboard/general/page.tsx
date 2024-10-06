@@ -1,128 +1,127 @@
-"use client";
+import { Card, CardContent } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Github, Linkedin } from "lucide-react";
+import Header from "@/components/common/Header";
+import Footer from "@/components/common/Footer";
+import React from "react";
 
-import { useState, useEffect } from "react";
-import StatCard from "@/components/StatCard";
-import HomeMap from "@/components/HomeMap";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ThermometerSnowflake, Droplets, Wind } from "lucide-react";
-import {
-  fetchLowestTemperatureData,
-  fetchGuardianPositionDataByZone,
-  fetchAllTelemetryData,
-} from "@/lib/api_utils";
-import { GuardianPositionData, GuardianTelemetryData } from "@/lib/interfaces";
+const teamMembers = [
+  {
+    name: "Maximiliano Militzer",
+    role: "Responsible for...",
+    linkedin: "https://www.linkedin.com/in/maxmilitzer/",
+    github: "https://github.com/Dyotson",
+    avatar: "/placeholder.svg?height=400&width=400",
+  },
+  {
+    name: "Francisco Wulf",
+    role: "Responsible for...",
+    linkedin: "https://www.linkedin.com/in/0wulf",
+    github: "https://github.com/0wulf",
+    avatar: "/placeholder.svg?height=400&width=400",
+  },
+  {
+    name: "Diego Costa",
+    role: "Responsible for...",
+    linkedin: "https://www.linkedin.com/in/diegocostar",
+    github: "https://github.com/diegocostares",
+    avatar: "/placeholder.svg?height=400&width=400",
+  },
+  {
+    name: "Ignacio Muñoz",
+    role: "Responsible for...",
+    linkedin: "https://linkedin.com/in/ignacio-munoz-repetto",
+    github: "https://github.com/itmunoz",
+    avatar: "/placeholder.svg?height=400&width=400",
+  },
+  {
+    name: "Gabriel Miranda Contreras",
+    role: "Responsible for...",
+    linkedin: "www.linkedin.com/in/gabriel-ignacio-miranda-contreras",
+    github: "https://github.com/ggmirandac",
+    avatar: "/placeholder.svg?height=400&width=400",
+  },
+  {
+    name: "Maite Estay",
+    role: "Responsible for...",
+    linkedin: "https://www.linkedin.com/in/maite-estay-casanova-9a7511229/",
+    github: "",
+    avatar: "/placeholder.svg?height=400&width=400",
+  },
+];
 
-export default function GeneralPage() {
-  const [selectedZone, setSelectedZone] = useState<string>("Zona 1");
-  const [zoneData, setZoneData] = useState<GuardianPositionData[]>([]);
-  const [telemetryData, setTelemetryData] = useState<GuardianTelemetryData[]>(
-    []
-  );
-  const [climateData, setClimateData] = useState<GuardianTelemetryData | null>(
-    null
-  );
-
-  useEffect(() => {
-    const fetchZoneData = async () => {
-      const response = await fetchGuardianPositionDataByZone(selectedZone);
-      if (response.length > 0) {
-        setZoneData(response);
-      }
-    };
-
-    fetchZoneData();
-  }, [selectedZone]);
-
-  useEffect(() => {
-    const fetchClimateData = async () => {
-      const response = await fetchLowestTemperatureData();
-      setClimateData(response);
-    };
-
-    fetchClimateData();
-  }, []);
-
-  useEffect(() => {
-    const fetchTelemetryData = async () => {
-      const response = await fetchAllTelemetryData();
-      setTelemetryData(response);
-    };
-
-    fetchTelemetryData();
-  }, []);
-
-  const roundValue = (value: number) => Math.round(value * 100) / 100;
-
+export default function AboutUs() {
   return (
-    <>
-      <div className="mb-6 flex justify-between items-center">
-        <Select value={selectedZone} onValueChange={setSelectedZone}>
-          <SelectTrigger className="w-[180px] transition duration-200 ease-in-out hover:shadow-md">
-            <SelectValue placeholder="Seleccionar zona" />
-          </SelectTrigger>
-          <SelectContent>
-            {["Zona 1", "Zona 2", "Zona 3"].map((zone) => (
-              <SelectItem key={zone} value={zone}>
-                {zone}
-              </SelectItem>
+    <div className="flex flex-col min-h-screen">
+      <Header />
+
+      <main className="flex-1 bg-gradient-to-b py-12">
+        <div className="container mx-auto px-4">
+          <h1 className="text-4xl font-bold text-center mb-4">
+            Our Team
+          </h1>
+          <p className="text-center mb-12 text-lg text-gray-600 max-w-2xl mx-auto">
+            We are a passionate team that participated in the "NASA Space Apps
+            Challenge 2024". Together, we created FrostAway to revolutionize crop
+            protection against frost.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {teamMembers.map((member, index) => (
+              <Card
+                key={index}
+                className="bg-white shadow-lg hover:shadow-xl transition-shadow duration-300"
+              >
+                <CardContent className="p-6">
+                  <div className="flex flex-col items-center">
+                    <Avatar className="w-32 h-32 mb-4">
+                      <AvatarImage src={member.avatar} alt={member.name} />
+                      <AvatarFallback>
+                        {member.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")}
+                      </AvatarFallback>
+                    </Avatar>
+                    <h2 className="text-xl font-semibold text-gray-800 mb-1">
+                      {member.name}
+                    </h2>
+                    <p className="text-sm text-blue-600 mb-4">{member.role}</p>
+                    <div className="flex space-x-2 mb-4">
+                      {member.linkedin && (
+                        <Button variant="outline" size="icon" asChild>
+                          <a
+                            href={member.linkedin}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="LinkedIn"
+                          >
+                            <Linkedin className="w-4 h-4" />
+                          </a>
+                        </Button>
+                      )}
+                      {member.github && (
+                        <Button variant="outline" size="icon" asChild>
+                          <a
+                            href={member.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="GitHub"
+                          >
+                            <Github className="w-4 h-4" />
+                          </a>
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             ))}
-          </SelectContent>
-        </Select>
-      </div>
+          </div>
+        </div>
+      </main>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-4">
-        <StatCard
-          title="Temperatura Más Baja Reciente"
-          value={
-            climateData ? `${roundValue(climateData.temperature)}°C` : "N/A"
-          }
-          icon={<ThermometerSnowflake className="h-4 w-4 text-blue-500" />}
-        />
-        <StatCard
-          title="Humedad Relativa"
-          value={
-            climateData
-              ? `${roundValue(climateData.relative_humidity)}%`
-              : "N/A"
-          }
-          icon={<Droplets className="h-4 w-4 text-blue-300" />}
-        />
-        <StatCard
-          title="Presión Barométrica"
-          value={
-            climateData
-              ? `${roundValue(climateData.barometric_pressure)} hPa`
-              : "N/A"
-          }
-          icon={<Wind className="h-4 w-4 text-gray-500" />}
-        />
-      </div>
-
-      <Card className="mb-4 shadow-md">
-        <CardHeader>
-          <CardTitle>Mapa del Terreno</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {zoneData.length > 0 ? (
-            <div className="w-full h-[500px] sm:h-[600px]">
-              <HomeMap
-                zoneData={zoneData}
-                telemetryData={telemetryData}
-                zoom={15}
-              />
-            </div>
-          ) : (
-            <p>No hay datos disponibles para esta zona</p>
-          )}
-        </CardContent>
-      </Card>
-    </>
+      <Footer />
+    </div>
   );
 }

@@ -82,7 +82,7 @@ export default function ConfigurationForm({
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="mb-4">
           <Label htmlFor={`name-${formData.id}`}>
-            <Home className="mr-2 h-4 w-4 inline" /> Nombre de la Zona
+            <Home className="mr-2 h-4 w-4 inline" /> Zone Name
           </Label>
           <Input
             id={`name-${formData.id}`}
@@ -97,7 +97,7 @@ export default function ConfigurationForm({
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div className="flex items-center justify-between">
             <Label htmlFor={`sprinklers-${formData.id}`}>
-              <Droplet className="mr-2 h-4 w-4 inline" /> Aspersores
+              <Droplet className="mr-2 h-4 w-4 inline" /> Sprinklers
             </Label>
             <Switch
               id={`sprinklers-${formData.id}`}
@@ -109,7 +109,7 @@ export default function ConfigurationForm({
           </div>
           <div className="flex items-center justify-between">
             <Label htmlFor={`roof-${formData.id}`}>
-              <Home className="mr-2 h-4 w-4 inline" /> Techo
+              <Home className="mr-2 h-4 w-4 inline" /> Roof
             </Label>
             <Switch
               id={`roof-${formData.id}`}
@@ -121,7 +121,7 @@ export default function ConfigurationForm({
           </div>
           <div className="flex items-center justify-between">
             <Label htmlFor={`heaters-${formData.id}`}>
-              <Thermometer className="mr-2 h-4 w-4 inline" /> Calefactores
+              <Thermometer className="mr-2 h-4 w-4 inline" /> Heaters
             </Label>
             <Switch
               id={`heaters-${formData.id}`}
@@ -133,7 +133,7 @@ export default function ConfigurationForm({
           </div>
           <div className="flex items-center justify-between">
             <Label htmlFor={`fans-${formData.id}`}>
-              <Fan className="mr-2 h-4 w-4 inline" /> Ventiladores
+              <Fan className="mr-2 h-4 w-4 inline" /> Heat Fans
             </Label>
             <Switch
               id={`fans-${formData.id}`}
@@ -147,24 +147,24 @@ export default function ConfigurationForm({
 
         <div className="mb-4">
           <Label htmlFor={`cropType-${formData.id}`}>
-            <Leaf className="mr-2 h-4 w-4 inline" /> Tipo de Cultivo
+            <Leaf className="mr-2 h-4 w-4 inline" /> Crop Type
           </Label>
           <Select value={formData.cropType} onValueChange={handleSelectChange}>
             <SelectTrigger id={`cropType-${formData.id}`} className="mt-1">
               <SelectValue placeholder="Selecciona el tipo de cultivo" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Maíz">Maíz</SelectItem>
-              <SelectItem value="Trigo">Trigo</SelectItem>
-              <SelectItem value="Soja">Soja</SelectItem>
-              <SelectItem value="Otros">Otros</SelectItem>
+              <SelectItem value="Maíz">Corn</SelectItem>
+              <SelectItem value="Trigo">Wheat</SelectItem>
+              <SelectItem value="Soja">Soy</SelectItem>
+              <SelectItem value="Otros">Others</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         <div className="mb-4">
           <Label htmlFor={`description-${formData.id}`}>
-            <FileText className="mr-2 h-4 w-4 inline" /> Descripción
+            <FileText className="mr-2 h-4 w-4 inline" /> Description
           </Label>
           <Textarea
             id={`description-${formData.id}`}
@@ -177,12 +177,12 @@ export default function ConfigurationForm({
         </div>
 
         <div className="flex space-x-4">
-          <Button type="submit">Guardar Zona</Button>
+          <Button type="submit">Save Zone</Button>
           <Button type="button" onClick={onResetPolygon} variant="destructive">
-            <XCircle className="mr-2 h-4 w-4 inline" /> Resetear Polígono
+            <XCircle className="mr-2 h-4 w-4 inline" /> Reset Polygon
           </Button>
           <Button type="button" onClick={onCancel} variant="outline">
-            Cancelar
+            Cancel
           </Button>
         </div>
       </form>

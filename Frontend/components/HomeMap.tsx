@@ -33,11 +33,13 @@ export default function HomeMap({
     useState<google.maps.LatLngLiteral | null>(null);
 
   if (loadError) {
-    return <div>Error al cargar el mapa</div>;
+    return <div>Error loading map
+    </div>;
   }
 
   if (!isLoaded) {
-    return <div>Cargando mapa...</div>;
+    return <div>Loading map...
+    </div>;
   }
 
   // Ordenamos las coordenadas del polígono
@@ -141,18 +143,20 @@ export default function HomeMap({
           >
             <div className="p-2 bg-white rounded shadow-md text-gray-800">
               <h3 className="text-base font-semibold text-blue-600 mb-2">
-                Datos de Telemetría del Guardian
+                Guardian Telemetry Data
               </h3>
               <p className="mb-1">
-                <span className="font-semibold">Temperatura:</span>{" "}
+                <span className="font-semibold">Temperature:</span>{" "}
                 {selectedTelemetry.temperature}°C
               </p>
               <p className="mb-1">
-                <span className="font-semibold">Humedad Relativa:</span>{" "}
+                <span className="font-semibold">Relative Humidity:
+                </span>{" "}
                 {selectedTelemetry.relative_humidity}%
               </p>
               <p className="mb-1">
-                <span className="font-semibold">Presión Barométrica:</span>{" "}
+                <span className="font-semibold">Barometric Pressure:
+                </span>{" "}
                 {selectedTelemetry.barometric_pressure} hPa
               </p>
               <p className="text-sm text-gray-500">

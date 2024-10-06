@@ -16,7 +16,7 @@ export default function ControlMethod({ name, icon }: ControlMethodProps) {
       {icon}
       <h3 className="mt-2 text-sm font-medium">{name}</h3>
       <Button className="mt-2" variant="outline" size="sm">
-        Agregar
+        Add
       </Button>
     </Card>
   );

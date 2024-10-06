@@ -20,25 +20,25 @@ const Header: React.FC = () => {
           className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:underline underline-offset-4"
           href="#features"
         >
-          Características
+          Features
         </Link>
         <Link
           className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:underline underline-offset-4"
           href="#pricing"
         >
-          Precios
+          Pricing
         </Link>
         <Link
           className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:underline underline-offset-4"
           href="#about"
         >
-          Acerca de
+          About Us
         </Link>
         <Link
           className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:underline underline-offset-4"
           href="#contact"
         >
-          Contacto
+          Contact
         </Link>
       </nav>
 
@@ -55,25 +55,25 @@ const Header: React.FC = () => {
             className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:underline underline-offset-4"
             href="#features"
           >
-            Características
+            Features
           </Link>
           <Link
             className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:underline underline-offset-4"
             href="#pricing"
           >
-            Precios
+            Pricing
           </Link>
           <Link
             className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:underline underline-offset-4"
             href="#about"
           >
-            Acerca de
+            About Us
           </Link>
           <Link
             className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:underline underline-offset-4"
             href="#contact"
           >
-            Contacto
+            Contact
           </Link>
         </nav>
       </div>

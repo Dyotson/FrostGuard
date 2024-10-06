@@ -15,22 +15,22 @@ export default function Sidebar() {
       icon: <Home className="mr-2" />,
     },
     {
-      name: "Alertas",
+      name: "Alerts",
       href: "/dashboard/alerts",
       icon: <AlertTriangle className="mr-2" />,
     },
     {
-      name: "Pronósticos",
+      name: "Forecasts",
       href: "/dashboard/activity",
       icon: <Bell className="mr-2" />,
     },
     {
-      name: "Métodos de Control",
+      name: "Control Methods",
       href: "/dashboard/control_methods",
       icon: <Sprout className="mr-2" />,
     },
     {
-      name: "Configuraciones",
+      name: "Configurations",
       href: "/dashboard/configurations",
       icon: <Settings className="mr-2" />,
     },
@@ -51,9 +51,8 @@ export default function Sidebar() {
             <li key={item.href}>
               <Link
                 href={item.href}
-                className={`flex items-center w-full text-left p-2 rounded ${
-                  isActive ? "bg-gray-200 font-semibold" : "hover:bg-gray-100"
-                }`}
+                className={`flex items-center w-full text-left p-2 rounded ${isActive ? "bg-gray-200 font-semibold" : "hover:bg-gray-100"
+                  }`}
               >
                 {item.icon}
                 {item.name}

@@ -58,29 +58,27 @@ export default function AddControlMethodDialog({
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" className="flex items-center space-x-2">
-          <span>Agregar Método de Control</span>
+          <span>Add Control Method</span>
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Agregar Nuevo Método de Control</DialogTitle>
+          <DialogTitle>Add New Control Method</DialogTitle>
           <DialogDescription>
-            Selecciona el tipo de método de control, asigna una zona y dale un
-            nombre personalizado.
+            Select the type of control method, assign a zone, and give it a custom name.
           </DialogDescription>
         </DialogHeader>
 
         <div className="mt-4">
-          <Label htmlFor="control-type">Tipo de Control</Label>
+          <Label htmlFor="control-type">Control Type</Label>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {Object.keys(controlTypes).map((key) => (
               <Button
                 key={key}
                 variant="outline"
                 onClick={() => setSelectedType(key)}
-                className={`${
-                  selectedType === key ? "border-blue-500" : ""
-                } flex items-center space-x-2`}
+                className={`${selectedType === key ? "border-blue-500" : ""
+                  } flex items-center space-x-2`}
               >
                 {controlTypes[key].icon}
                 <span>{controlTypes[key].name}</span>
@@ -90,23 +88,23 @@ export default function AddControlMethodDialog({
         </div>
 
         <div className="mt-4">
-          <Label htmlFor="control-name">Nombre Personalizado</Label>
+          <Label htmlFor="control-name">Custom Name</Label>
           <Input
             id="control-name"
             value={newControlName}
             onChange={(e) => setNewControlName(e.target.value)}
-            placeholder="Escribe el nombre"
+            placeholder="Enter the name"
           />
         </div>
 
         <div className="mt-4">
-          <Label htmlFor="zone">Asignar Zona</Label>
+          <Label htmlFor="zone">Assign Zone</Label>
           <Select
             value={selectedZoneId !== null ? selectedZoneId.toString() : ""}
             onValueChange={(value) => setSelectedZoneId(Number(value))}
           >
             <SelectTrigger className="w-full mt-1">
-              <SelectValue placeholder="Seleccionar zona" />
+              <SelectValue placeholder="Select zone" />
             </SelectTrigger>
             <SelectContent>
               {guardianZones.map((zone) => (
@@ -125,7 +123,7 @@ export default function AddControlMethodDialog({
               !selectedType || !newControlName || selectedZoneId === null
             }
           >
-            Agregar
+            Add
           </Button>
         </DialogFooter>
       </DialogContent>

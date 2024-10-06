@@ -39,7 +39,7 @@ export default function AlertCard({
         >
           <h3 className="text-base font-semibold flex items-center text-gray-800">
             <AlertCircle className="w-4 h-4 mr-2" />
-            Recomendación
+            Recommendation
           </h3>
           <p className="text-sm text-gray-700">{recommendation}</p>
         </div>
@@ -49,7 +49,7 @@ export default function AlertCard({
             <CardContent className="p-3">
               <div className="flex items-center space-x-2 text-gray-700">
                 <Calendar className="w-4 h-4" />
-                <span className="font-semibold text-sm">Inicio:</span>
+                <span className="font-semibold text-sm">Start:</span>
               </div>
               <p className="mt-1 text-sm">{day}</p>
             </CardContent>
@@ -59,7 +59,7 @@ export default function AlertCard({
             <CardContent className="p-3">
               <div className="flex items-center space-x-2 text-gray-700">
                 <Calendar className="w-4 h-4" />
-                <span className="font-semibold text-sm">Término:</span>
+                <span className="font-semibold text-sm">Finish:</span>
               </div>
               <p className="mt-1 text-sm">{endTime}</p>
             </CardContent>
@@ -69,7 +69,7 @@ export default function AlertCard({
         <div className="flex items-center text-gray-600 bg-white p-2 rounded-md">
           <Clock className="w-4 h-4 mr-2" />
           <span className="text-lg font-medium font-semibold">
-            Duración: {duration}
+            Duration: {duration}
           </span>
         </div>
       </CardContent>

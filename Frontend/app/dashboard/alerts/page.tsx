@@ -25,7 +25,7 @@ export default function AlertsPage() {
         const data = await fetchAlertsData();
         setAlerts(data);
       } catch (error) {
-        setError("Error al cargar las alertas.");
+        setError("Error loading alerts.");
       } finally {
         setLoading(false);
       }
@@ -39,7 +39,7 @@ export default function AlertsPage() {
 
   const formatDateTime = (datetime: string) => {
     const date = new Date(datetime);
-    return date.toLocaleString("es-ES", {
+    return date.toLocaleString("en-US", {
       weekday: "long",
       day: "numeric",
       month: "long",
@@ -56,18 +56,17 @@ export default function AlertsPage() {
     const remainingHours = Math.round(durationHours % 24);
 
     if (days > 0) {
-      return `${days} día${days > 1 ? "s" : ""} y ${remainingHours} hora${
-        remainingHours !== 1 ? "s" : ""
-      }`;
+      return `${days} day${days > 1 ? "s" : ""} and ${remainingHours} hour${remainingHours !== 1 ? "s" : ""
+        }`;
     } else {
-      return `${remainingHours} hora${remainingHours !== 1 ? "s" : ""}`;
+      return `${remainingHours} hour${remainingHours !== 1 ? "s" : ""}`;
     }
   };
 
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <p className="text-gray-500">Cargando alertas...</p>
+        <p className="text-gray-500">Loading alerts...</p>
       </div>
     );
   }
@@ -83,12 +82,12 @@ export default function AlertsPage() {
 
   return (
     <div className="space-y-8 mx-auto">
-      {/* Alertas Activas */}
+      {/* Active Alerts */}
       <Card className="shadow-md rounded-md">
         <CardHeader className="flex flex-row items-center space-x-2 bg-[#ff966a] text-white rounded-t-md">
           <AlertTriangle className="w-6 h-6" />
           <CardTitle className="text-lg font-semibold">
-            Alertas Activas
+            Active Alerts
           </CardTitle>
         </CardHeader>
         <CardContent className="pt-4">
@@ -99,7 +98,7 @@ export default function AlertsPage() {
                   key={alert.id}
                   day={formatDateTime(alert.start_datetime)}
                   startTime={new Date(alert.start_datetime).toLocaleTimeString(
-                    "es-ES"
+                    "en-US"
                   )}
                   endTime={formatDateTime(alert.end_datetime)}
                   duration={calculateDuration(
@@ -114,18 +113,18 @@ export default function AlertsPage() {
           ) : (
             <div className="flex items-center text-gray-500">
               <Bell className="w-5 h-5 mr-2" />
-              <p>No hay alertas activas.</p>
+              <p>No active alerts.</p>
             </div>
           )}
         </CardContent>
       </Card>
 
-      {/* Alertas Históricas */}
+      {/* Historical Alerts */}
       <Card className="shadow-md rounded-md">
         <CardHeader className="flex flex-row items-center space-x-2 bg-gray-700 text-white rounded-t-md">
           <Clock className="w-6 h-6" />
           <CardTitle className="text-lg font-semibold">
-            Alertas Históricas
+            Historical Alerts
           </CardTitle>
         </CardHeader>
         <CardContent className="pt-4">
@@ -136,7 +135,7 @@ export default function AlertsPage() {
                   key={alert.id}
                   day={formatDateTime(alert.start_datetime)}
                   startTime={new Date(alert.start_datetime).toLocaleTimeString(
-                    "es-ES"
+                    "en-US"
                   )}
                   endTime={formatDateTime(alert.end_datetime)}
                   duration={calculateDuration(
@@ -151,7 +150,7 @@ export default function AlertsPage() {
           ) : (
             <div className="flex items-center text-gray-500">
               <Bell className="w-5 h-5 mr-2" />
-              <p>No hay alertas históricas registradas.</p>
+              <p>No historical alerts recorded.</p>
             </div>
           )}
         </CardContent>

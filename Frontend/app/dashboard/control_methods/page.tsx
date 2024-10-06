@@ -23,30 +23,30 @@ const controlTypes: Record<string, ControlType> = {
   aspersion: {
     id: "aspersion",
     icon: <Sprout className="h-8 w-8 text-green-500" />,
-    name: "Aspersores",
+    name: "Sprinklers",
     description:
-      "Riego con agua para crear una capa de hielo que protege los cultivos del daño por heladas. Útil para cultivos frutales.",
+      "Water irrigation to create an ice layer that protects crops from frost damage. Useful for fruit crops.",
   },
   roof: {
     id: "roof",
     icon: <Home className="h-8 w-8 text-yellow-500" />,
-    name: "Techos",
+    name: "Roofs",
     description:
-      "Infraestructura de techos útiles principalmente para cultivos de menor escala, que requieren protección directa en su superficie.",
+      "Roof infrastructure mainly useful for smaller-scale crops that require direct surface protection.",
   },
   heater: {
     id: "heater",
     icon: <ThermometerSnowflake className="h-8 w-8 text-red-500" />,
-    name: "Calefactores",
+    name: "Heaters",
     description:
-      "Sistema de calefacción aplicados en plantaciones sensibles como cítricos y viñedos.",
+      "Heating systems applied to sensitive plantations like citrus and vineyards.",
   },
   fan: {
     id: "fan",
     icon: <Wind className="h-8 w-8 text-blue-500" />,
-    name: "Ventiladores",
+    name: "Fans",
     description:
-      "Tecnologías que mezclan el aire más cálido en altura con el frío cercano al suelo. Útiles para viñedos.",
+      "Technologies that mix warmer air from above with the colder air near the ground. Useful for vineyards.",
   },
 };
 
@@ -66,7 +66,7 @@ export default function ControlMethodsPage() {
         setControls(fetchedControls);
         setGuardianZones(fetchedZones);
       } catch (err) {
-        setError("Error al cargar los datos.");
+        setError("Error loading data.");
         console.error(err);
       } finally {
         setLoading(false);
@@ -92,7 +92,7 @@ export default function ControlMethodsPage() {
       const newControl = await createControlMethod(payload);
       setControls([...controls, newControl]);
     } catch (err) {
-      setError("Error al agregar el método de control.");
+      setError("Error adding control method.");
       console.error(err);
     }
   };
@@ -109,13 +109,13 @@ export default function ControlMethodsPage() {
       await deleteControlMethod(id);
       setControls(controls.filter((control) => control.id !== id));
     } catch (err) {
-      setError("Error al eliminar el método de control.");
+      setError("Error removing control method.");
       console.error(err);
     }
   };
 
   if (loading) {
-    return <p>Cargando métodos de control...</p>;
+    return <p>Loading control methods...</p>;
   }
 
   if (error) {

@@ -9,42 +9,42 @@ import React from "react";
 const teamMembers = [
   {
     name: "Maximiliano Militzer",
-    role: "Encargado de...",
+    role: "Responsible for...",
     linkedin: "https://www.linkedin.com/in/maxmilitzer/",
     github: "https://github.com/Dyotson",
     avatar: "/placeholder.svg?height=400&width=400",
   },
   {
     name: "Francisco Wulf",
-    role: "Encargado de...",
+    role: "Responsible for...",
     linkedin: "https://www.linkedin.com/in/0wulf",
     github: "https://github.com/0wulf",
     avatar: "/placeholder.svg?height=400&width=400",
   },
   {
     name: "Diego Costa",
-    role: "Encargado de...",
+    role: "Responsible for...",
     linkedin: "https://www.linkedin.com/in/diegocostar",
     github: "https://github.com/diegocostares",
     avatar: "/placeholder.svg?height=400&width=400",
   },
   {
     name: "Ignacio Muñoz",
-    role: "Encargado de...",
+    role: "Responsible for...",
     linkedin: "https://linkedin.com/in/ignacio-munoz-repetto",
     github: "https://github.com/itmunoz",
     avatar: "/placeholder.svg?height=400&width=400",
   },
   {
     name: "Gabriel Miranda Contreras",
-    role: "Encargado de...",
+    role: "Responsible for...",
     linkedin: "www.linkedin.com/in/gabriel-ignacio-miranda-contreras",
     github: "https://github.com/ggmirandac",
     avatar: "/placeholder.svg?height=400&width=400",
   },
   {
     name: "Maite Estay",
-    role: "Encargado de...",
+    role: "Responsible for...",
     linkedin: "https://www.linkedin.com/in/maite-estay-casanova-9a7511229/",
     github: "",
     avatar: "/placeholder.svg?height=400&width=400",
@@ -59,12 +59,12 @@ export default function AboutUs() {
       <main className="flex-1 bg-gradient-to-b py-12">
         <div className="container mx-auto px-4">
           <h1 className="text-4xl font-bold text-center mb-4">
-            Nuestro Equipo
+            Our Team
           </h1>
           <p className="text-center mb-12 text-lg text-gray-600 max-w-2xl mx-auto">
-            Somos un equipo muy apasionado que participó en "NASA Space Apps
-            Challenge 2024". Juntos, hemos creado FrostAway para revolucionar la
-            protección de cultivos contra las heladas.
+            We are a passionate team that participated in the "NASA Space Apps
+            Challenge 2024". Together, we created FrostAway to revolutionize crop
+            protection against frost.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {teamMembers.map((member, index) => (

@@ -2,15 +2,15 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { geistSans, geistMono } from "./fonts";
 
-// Metadatos mejorados para SEO
+// Enhanced metadata for SEO
 export const metadata: Metadata = {
   //   metadataBase: new URL("http://frostaway.earth/"),
-  title: "FrostAway - Protege tus cultivos",
+  title: "FrostAway - Protect Your Crops",
   description:
-    "Plataforma para monitorear condiciones climáticas y proteger cultivos de manera efectiva.",
+    "Platform to monitor weather conditions and effectively protect crops.",
   //   openGraph: {
   //     title: "FrostAway",
-  //     description: "Monitoreo de clima en tiempo real para cultivos.",
+  //     description: "Real-time weather monitoring for crops.",
   //     // url: "http://frostaway.earth/",
   //     siteName: "FrostAway",
   //     images: [
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   //     card: "summary_large_image",
   //     site: "@frostaway",
   //     title: "FrostAway",
-  //     description: "Protege tus cultivos con monitoreo en tiempo real.",
+  //     description: "Protect your crops with real-time monitoring.",
   //     images: ["/assets/logo.svg"],
   //   },
 };
@@ -45,22 +45,22 @@ export default function RootLayout({
 
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description" content="Protege tus cultivos con monitoreo en tiempo real." />
+        <meta name="description" content="Protect your crops with real-time monitoring." />
         <meta name="theme-color" content="#ffffff" />
 
-        {/* Metadatos de OpenGraph */}
+        {/* OpenGraph Metadata */}
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="FrostAway - Protege tus cultivos" />
-        <meta property="og:description" content="Plataforma para monitorear condiciones climáticas y proteger cultivos de manera efectiva." />
+        <meta property="og:title" content="FrostAway - Protect Your Crops" />
+        <meta property="og:description" content="Platform to monitor weather conditions and effectively protect crops." />
         <meta property="og:image" content="/assets/logo.svg" />
         {/* <meta property="og:url" content="http://frostaway.earth/" /> */}
         <meta property="og:locale" content="es_ES" />
 
-        {/* Metadatos de Twitter */}
+        {/* Twitter Metadata */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@frostaway" />
         <meta name="twitter:title" content="FrostAway" />
-        <meta name="twitter:description" content="Protege tus cultivos con monitoreo en tiempo real." />
+        <meta name="twitter:description" content="Protect your crops with real-time monitoring." />
         <meta name="twitter:image" content="/assets/logo.svg" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
