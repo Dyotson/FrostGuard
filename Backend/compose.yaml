@@ -42,7 +42,7 @@ services:
       - "traefik.http.routers.api.rule=Host(`frostback.earth`)"   # Replace with your domain
       - "traefik.http.routers.api.entrypoints=websecure"
       - "traefik.http.routers.api.tls.certresolver=myresolver"
-      - "traefik.http.services.api.loadbalancer.server.port=80" # Replace with your container's internal port
+      - "traefik.http.services.api.loadbalancer.server.port=8000" # Replace with your container's internal port
 
 
   postgres:
