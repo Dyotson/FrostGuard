@@ -108,3 +108,47 @@ export async function fetchAlertsData(): Promise<any[]> {
     throw new Error("Error al obtener los datos de las alertas.");
   }
 }
+
+export interface GuardianTelemetryData {
+  id: number;
+  sender: string;
+  barometric_pressure: number;
+  relative_humidity: number;
+  temperature: number;
+  timestamp: string;
+}
+
+export interface GuardianPositionData {
+  id: number;
+  sender: string;
+  altitude: number;
+  latitude_i: number;
+  longitude_i: number;
+  guardian_zone: {
+    id: number;
+    name: string;
+    has_sprinklers: boolean;
+    has_roof: boolean;
+    has_heaters: boolean;
+    has_fans: boolean;
+    crop_type: string;
+    description: string;
+    coordinates: { lat: number; lng: number }[];
+  };
+}
+
+// Obtener la temperatura más baja reciente
+export async function fetchLowestTemperatureData(): Promise<GuardianTelemetryData> {
+  return apiRequest<GuardianTelemetryData>(
+    "/guardian_telemetry_data/most_recent_lowest_temperature"
+  );
+}
+
+// Obtener los datos de la posición de una zona por nombre
+export async function fetchGuardianPositionDataByZone(
+  zone_name: string
+): Promise<GuardianPositionData[]> {
+  return apiRequest<GuardianPositionData[]>(
+    `/guardian_position_data?zone_name=${zone_name}`
+  );
+}

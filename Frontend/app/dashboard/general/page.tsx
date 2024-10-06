@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import StatCard from "@/components/StatCard";
-import MapComponent from "@/components/MapComponent";
+import HomeMap from "@/components/HomeMap";
 import {
   Select,
   SelectContent,
@@ -11,42 +11,56 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { ThermometerSnowflake, Droplets, Wind } from "lucide-react";
 import {
-  Settings,
-  ThermometerSnowflake,
-  Droplets,
-  Wind,
-  AlertTriangle,
-} from "lucide-react";
-
-const zones = {
-  "Zona 1": {
-    center: { lat: 10.0, lng: -84.0 },
-    markers: [
-      { lat: 10.1, lng: -84.1, label: "A" },
-      { lat: 9.9, lng: -83.9, label: "B" },
-    ],
-  },
-  "Zona 2": {
-    center: { lat: 11.0, lng: -85.0 },
-    markers: [
-      { lat: 11.1, lng: -85.1, label: "C" },
-      { lat: 10.9, lng: -84.9, label: "D" },
-    ],
-  },
-  "Zona 3": {
-    center: { lat: 12.0, lng: -86.0 },
-    markers: [
-      { lat: 12.1, lng: -86.1, label: "E" },
-      { lat: 11.9, lng: -85.9, label: "F" },
-    ],
-  },
-};
+  fetchLowestTemperatureData,
+  fetchGuardianPositionDataByZone,
+  GuardianPositionData,
+  GuardianTelemetryData,
+} from "@/lib/api_utils";
 
 export default function GeneralPage() {
-  const [selectedZone, setSelectedZone] = useState("Zona 1");
-//   const currentZone = zones[selectedZone];
+  const [selectedZone, setSelectedZone] = useState<string>("Zona 1");
+  const [zoneData, setZoneData] = useState<GuardianPositionData | null>(null);
+  const [climateData, setClimateData] = useState<GuardianTelemetryData | null>(
+    null
+  );
+
+  useEffect(() => {
+    // Cargar los datos de la zona seleccionada
+    const fetchZoneData = async () => {
+      const response = await fetchGuardianPositionDataByZone(selectedZone);
+      if (response.length > 0) {
+        setZoneData(response[0]);
+      }
+    };
+
+    fetchZoneData();
+  }, [selectedZone]);
+
+  useEffect(() => {
+    // Cargar los datos climáticos (temperatura, presión, humedad)
+    const fetchClimateData = async () => {
+      const response = await fetchLowestTemperatureData();
+      setClimateData(response);
+    };
+
+    fetchClimateData();
+  }, []);
+
+  // Función para redondear valores a 2 decimales
+  const roundValue = (value: number) => Math.round(value * 100) / 100;
+
+  // Calcular el centro del mapa usando las coordenadas de la zona
+  const calculateMapCenter = (coordinates: { lat: number; lng: number }[]) => {
+    const totalCoords = coordinates.length;
+    const latSum = coordinates.reduce((sum, coord) => sum + coord.lat, 0);
+    const lngSum = coordinates.reduce((sum, coord) => sum + coord.lng, 0);
+    return {
+      lat: latSum / totalCoords,
+      lng: lngSum / totalCoords,
+    };
+  };
 
   return (
     <>
@@ -56,7 +70,7 @@ export default function GeneralPage() {
             <SelectValue placeholder="Seleccionar zona" />
           </SelectTrigger>
           <SelectContent>
-            {Object.keys(zones).map((zone) => (
+            {["Zona 1", "Zona 2", "Zona 3"].map((zone) => (
               <SelectItem key={zone} value={zone}>
                 {zone}
               </SelectItem>
@@ -67,24 +81,29 @@ export default function GeneralPage() {
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-4">
         <StatCard
-          title="Temperatura Promedio"
-          value="-2°C"
+          title="Temperatura Más Baja Reciente"
+          value={
+            climateData ? `${roundValue(climateData.temperature)}°C` : "N/A"
+          }
           icon={<ThermometerSnowflake className="h-4 w-4 text-blue-500" />}
         />
         <StatCard
-          title="Humedad Promedio"
-          value="65%"
+          title="Humedad Relativa"
+          value={
+            climateData
+              ? `${roundValue(climateData.relative_humidity)}%`
+              : "N/A"
+          }
           icon={<Droplets className="h-4 w-4 text-blue-300" />}
         />
         <StatCard
-          title="Velocidad del Viento"
-          value="10 km/h"
+          title="Presión Barométrica"
+          value={
+            climateData
+              ? `${roundValue(climateData.barometric_pressure)} hPa`
+              : "N/A"
+          }
           icon={<Wind className="h-4 w-4 text-gray-500" />}
-        />
-        <StatCard
-          title="Alertas Activas"
-          value="3"
-          icon={<AlertTriangle className="h-4 w-4 text-red-500" />}
         />
       </div>
 
@@ -92,13 +111,19 @@ export default function GeneralPage() {
         <CardHeader>
           <CardTitle>Mapa del Terreno</CardTitle>
         </CardHeader>
-        {/* <CardContent className="h-[400px]">
-          <MapComponent
-            center={currentZone.center}
-            zoom={12}
-            markers={currentZone.markers}
-          />
-        </CardContent> */}
+        <CardContent className="h-[600px]">
+          {" "}
+          {zoneData ? (
+            <HomeMap
+              center={calculateMapCenter(zoneData.guardian_zone.coordinates)} // Calculamos el centro dinámicamente
+              zoom={15}
+              markers={zoneData.guardian_zone.coordinates}
+              polygonCoordinates={zoneData.guardian_zone.coordinates} // Añadimos las coordenadas del polígono
+            />
+          ) : (
+            <p>No hay datos disponibles para esta zona</p>
+          )}
+        </CardContent>
       </Card>
     </>
   );
