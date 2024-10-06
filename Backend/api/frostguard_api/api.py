@@ -7,7 +7,7 @@ from ninja import NinjaAPI, Router, Schema
 from django.db.models import Max, Min
 from collections import defaultdict
 
-from frostguard_api.models import GuardianAlert, GuardianPositionData, GuardianTelemetryData, GuardianZone
+from frostguard_api.models import GuardianAlert, GuardianPositionData, GuardianTelemetryData, GuardianZone, ControlMethod
 
 # Instancia de la API principal
 api = NinjaAPI()
@@ -230,6 +230,57 @@ def delete_guardian_zone(request, guardian_zone_id: int):
     return {"success": True}
 
 
+control_methods_router = Router(tags=["Control Methods"])
+
+class ControlMethodSchema(Schema):
+    id: int
+    name: str
+    active: bool
+    guardian_zone: GuardianZoneSchema
+    control_type: str
+
+
+class CreateControlMethodSchema(Schema):
+    name: str
+    active: bool
+    guardian_zone_id: int
+    control_type: str
+
+
+@control_methods_router.get("/", response=List[ControlMethodSchema])
+def list_control_methods(request):
+    return list(ControlMethod.objects.all())
+
+
+@control_methods_router.get("/{control_method_id}", response=ControlMethodSchema)
+def get_control_method(request, control_method_id: int):
+    control_method = get_object_or_404(ControlMethod, id=control_method_id)
+    return control_method
+
+
+@control_methods_router.post("/", response=ControlMethodSchema)
+def create_control_method(request, payload: CreateControlMethodSchema):
+    control_method = ControlMethod.objects.create(**payload.dict())
+    return control_method
+
+
+@control_methods_router.put("/{control_method_id}", response=ControlMethodSchema)
+def update_control_method(request, control_method_id: int, payload: CreateControlMethodSchema):
+    control_method = get_object_or_404(ControlMethod, id=control_method_id)
+    for attr, value in payload.dict().items():
+        setattr(control_method, attr, value)
+    control_method.save()
+    return control_method
+
+
+@control_methods_router.delete("/{control_method_id}")
+def delete_control_method(request, control_method_id: int):
+    control_method = get_object_or_404(ControlMethod, id=control_method_id)
+    control_method.delete()
+    return {"success": True}
+
+
+api.add_router("/control_methods", control_methods_router)
 api.add_router("/guardian_position_data", guardian_position_data_router)
 api.add_router("/guardian_telemetry_data", guardian_telemetry_data_router)
 api.add_router("/guardian_alerts", guardian_alerts_router)

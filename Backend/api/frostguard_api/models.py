@@ -45,3 +45,23 @@ class ZoneContact(models.Model):
         related_name="zone_contact", 
         on_delete=models.PROTECT
     )
+
+
+class ControlMethod(models.Model):
+    name = models.CharField(max_length=255)
+    active = models.BooleanField()
+    guardian_zone = models.ForeignKey(
+        GuardianZone, 
+        related_name="control_method", 
+        on_delete=models.PROTECT
+    )
+    control_type = models.CharField(
+        max_length=20,  # Specify a max_length for the field
+        choices=[
+            ('aspersion', 'Aspersión'),
+            ('roof', 'Techo'),
+            ('heater', 'Calefactor'),
+            ('fan', 'Ventilador'),
+        ],
+        default='aspersion'
+    )

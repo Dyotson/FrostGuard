@@ -5,6 +5,7 @@ from frostguard_api.models import (
     GuardianZone, 
     GuardianAlert,
     ZoneContact,
+    ControlMethod
 )
 from django.utils import timezone
 from decimal import Decimal
@@ -77,6 +78,49 @@ class Command(BaseCommand):
                     "lng": -73.546295,
                 },
             ]
+        )
+
+        # Control Method
+        ControlMethod.objects.create(
+            name="Aspersor 1",
+            active=True,
+            guardian_zone=zone_1,
+            control_type='aspersion'
+        )
+
+        ControlMethod.objects.create(
+            name="Techo 1",
+            active=True,
+            guardian_zone=zone_1,
+            control_type='roof'
+        )
+
+        ControlMethod.objects.create(
+            name="Calefactor 1",
+            active=True,
+            guardian_zone=zone_1,
+            control_type='heater'
+        )
+
+        ControlMethod.objects.create(
+            name="Ventilador 1",
+            active=True,
+            guardian_zone=zone_1,
+            control_type='fan'
+        )
+
+        ControlMethod.objects.create(
+            name="Aspersion 2",
+            active=True,
+            guardian_zone=zone_2,
+            control_type='aspersion'
+        )
+
+        ControlMethod.objects.create(
+            name="Calefactor 2",
+            active=True,
+            guardian_zone=zone_1,
+            control_type='heater'
         )
 
         ZoneContact.objects.create(
