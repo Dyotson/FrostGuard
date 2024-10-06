@@ -5,27 +5,22 @@ import {
   GoogleMap,
   Marker,
   Polygon,
+  Circle,
 } from "@react-google-maps/api";
 import { ReactNode } from "react";
-
-interface MarkerData {
-  lat: number;
-  lng: number;
-  label?: string;
-}
 
 interface HomeMapProps {
   center: { lat: number; lng: number };
   zoom: number;
-  markers: MarkerData[];
-  polygonCoordinates: { lat: number; lng: number }[]; // Añadimos las coordenadas del polígono
+  markerPosition: { lat: number; lng: number };
+  polygonCoordinates: { lat: number; lng: number }[];
   children?: ReactNode;
 }
 
 export default function HomeMap({
   center,
   zoom,
-  markers,
+  markerPosition,
   polygonCoordinates,
   children,
 }: HomeMapProps) {
@@ -46,33 +41,45 @@ export default function HomeMap({
     height: "100%",
   };
 
+  const mapOptions = {
+    mapTypeId: "satellite",
+  };
+
   return (
     <GoogleMap
       mapContainerStyle={mapContainerStyle}
       center={center}
       zoom={zoom}
+      options={mapOptions}
     >
       <Polygon
         paths={polygonCoordinates}
         options={{
           fillColor: "#2196F3",
-          fillOpacity: 0.4,
+          fillOpacity: 0.1,
           strokeColor: "#1E88E5",
-          strokeOpacity: 1,
+          strokeOpacity: 0.8,
           strokeWeight: 2,
         }}
       />
-      {markers.map((marker, index) => (
-        <Marker
-          key={index}
-          position={{ lat: marker.lat, lng: marker.lng }}
-          icon={{
-            url: "/assets/map.svg",
-            scaledSize: new google.maps.Size(30, 35),
-          }}
-          label={marker.label}
-        />
-      ))}
+      <Marker
+        position={markerPosition}
+        icon={{
+          url: "/assets/map.svg",
+          scaledSize: new google.maps.Size(30, 40),
+        }}
+      />
+      <Circle
+        center={markerPosition}
+        radius={100}
+        options={{
+          fillColor: "#FF0000",
+          fillOpacity: 0.2,
+          strokeColor: "#FF0000",
+          strokeOpacity: 0.5,
+          strokeWeight: 1,
+        }}
+      />
       {children}
     </GoogleMap>
   );
