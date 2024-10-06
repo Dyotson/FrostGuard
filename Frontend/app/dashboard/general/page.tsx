@@ -15,10 +15,9 @@ import { ThermometerSnowflake, Droplets, Wind } from "lucide-react";
 import {
   fetchLowestTemperatureData,
   fetchGuardianPositionDataByZone,
-  fetchAllTelemetryData,  // Assuming you have a method to fetch telemetry data
-  GuardianPositionData,
-  GuardianTelemetryData,
+  fetchAllTelemetryData,
 } from "@/lib/api_utils";
+import { GuardianPositionData, GuardianTelemetryData } from "@/lib/interfaces";
 
 export default function GeneralPage() {
   const [selectedZone, setSelectedZone] = useState<string>("Zona 1");
