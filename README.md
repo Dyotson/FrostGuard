@@ -8,6 +8,8 @@ FrostAway is an innovative system for monitoring agricultural lands, aimed at pr
 
 ## Architecture Breakdown
 
+![FrostAwayDiagram](https://github.com/user-attachments/assets/49a7bfeb-20ef-4d91-8a61-dcb38e89b8f7)
+
 FrostAway is composed of three key components:
 
 1. **Backend**:
